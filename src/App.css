@@ -1,0 +1,370 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.cabecera,
+main,
+.pie-contenido {
+  width: min(1120px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+main {
+  flex: 1;
+  min-width: 0;
+}
+
+main:focus {
+  outline: none;
+}
+
+.saltar-contenido {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.75rem;
+  background: #101319;
+  transform: translateY(-200%);
+}
+
+.saltar-contenido:focus {
+  transform: translateY(0);
+}
+
+.cabecera {
+  padding-top: 1.8rem;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  color: #e8edf5;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.marca-simbolo {
+  margin-right: 0.65rem;
+  color: var(--verde);
+}
+
+.cursor-marca {
+  color: var(--amarillo);
+}
+
+.descripcion-marca {
+  margin-top: 0.5rem;
+  color: var(--texto-secundario);
+  font-size: 0.85rem;
+}
+
+.navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  border: 1px solid var(--borde);
+  background: var(--panel);
+}
+
+.navegacion a {
+  display: flex;
+  flex: 1 1 200px;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0.8rem;
+  border-bottom: 3px solid transparent;
+  color: var(--texto-secundario);
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.navegacion a:hover {
+  color: #e8edf5;
+  background: #253044;
+}
+
+.navegacion a[aria-current="page"] {
+  color: var(--verde);
+  background: #203029;
+  border-bottom-color: var(--verde);
+}
+
+.portada {
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+
+.portada h1 {
+  max-width: 24ch;
+}
+
+.etiqueta {
+  color: var(--verde);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.introduccion {
+  max-width: 70ch;
+  color: var(--texto-secundario);
+  font-size: 1.05rem;
+}
+
+.aviso {
+  max-width: 80ch;
+  padding-left: 1rem;
+  border-left: 3px solid var(--amarillo);
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
+}
+
+.seccion {
+  padding-block: 2rem;
+  border-top: 1px solid var(--borde);
+}
+
+.seccion > h2 {
+  margin-top: 0;
+}
+
+.pagina {
+  padding-block: 2.5rem;
+}
+
+.recorridos {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.tarjeta {
+  min-width: 0;
+  padding: 1.4rem;
+  border: 1px solid var(--borde);
+  border-radius: 0;
+  background: var(--panel);
+}
+
+.acceso {
+  display: flex;
+  flex-direction: column;
+  color: #e8edf5;
+  text-decoration: none;
+  border-top: 3px solid var(--color-acceso);
+}
+
+.acceso:hover {
+  background: #222c3b;
+  border-color: var(--color-acceso);
+}
+
+.acceso .etiqueta,
+.acceso-enlace {
+  color: var(--color-acceso);
+}
+
+.acceso p:not(.etiqueta) {
+  color: var(--texto-secundario);
+}
+
+.acceso-enlace {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.verde {
+  --color-acceso: var(--verde);
+}
+
+.azul {
+  --color-acceso: var(--azul);
+}
+
+.amarillo {
+  --color-acceso: var(--amarillo);
+}
+
+.lista-modulos {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin-top: 1.5rem;
+  list-style: none;
+}
+
+.modulo {
+  display: flex;
+  gap: 1rem;
+}
+
+.modulo > div {
+  min-width: 0;
+}
+
+.numero-modulo {
+  color: var(--amarillo);
+  font-size: 1.3rem;
+}
+
+.titulo-tarjeta {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+}
+
+.lista-recursos {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.lista-recursos li + li {
+  margin-top: 0.7rem;
+}
+
+.estado {
+  color: var(--texto-secundario);
+  font-size: 0.85rem;
+}
+
+.ficha {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoria {
+  color: var(--amarillo);
+  font-size: 0.8rem;
+}
+
+.titulo-previa {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--texto-secundario);
+}
+
+.resultado {
+  color: var(--verde);
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--azul);
+  color: var(--azul);
+  text-decoration: none;
+}
+
+.ficha .boton {
+  margin-top: auto;
+}
+
+.boton:hover {
+  background: #22344a;
+}
+
+.etiqueta-ejemplo {
+  margin-top: 2rem;
+}
+
+.metadatos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.metadatos span {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--borde);
+  color: var(--texto-secundario);
+  font-size: 0.8rem;
+}
+
+.bloque-codigo {
+  margin-block: 1rem;
+  border: 1px solid var(--borde);
+  background: #0d1117;
+}
+
+.barra-codigo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--borde);
+  color: var(--texto-secundario);
+}
+
+.boton-copiar {
+  min-height: 44px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--verde);
+  border-radius: 0;
+  color: var(--verde);
+  background: transparent;
+  cursor: pointer;
+}
+
+.boton-copiar:hover {
+  background: #203029;
+}
+
+.bloque-codigo pre {
+  margin: 0;
+  border: 0;
+}
+
+.mensaje-copia {
+  margin: 0;
+  padding: 0 1rem 0.75rem;
+  color: var(--amarillo);
+  font-size: 0.85rem;
+}
+
+.mensaje-copia:empty {
+  padding: 0;
+}
+
+.pie {
+  margin-top: 2rem;
+  padding-block: 2.5rem;
+  border-top: 1px solid var(--borde);
+  background: #141a23;
+}
+
+.pie .etiqueta {
+  color: var(--rojo);
+}
+
+.pie h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+}
+
+.firma {
+  margin: 2rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+  color: var(--texto-secundario);
+  font-size: 0.8rem;
+}
+
+@media (min-width: 760px) {
+  .lista-modulos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .recorridos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
