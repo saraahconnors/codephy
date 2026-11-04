@@ -13,6 +13,17 @@ export const leccionVariables = {
     "Distinguir los tipos int, float, str y bool; reconocer complex.",
     "Calcular e interpretar la energía cinética conservando sus unidades."
   ],
+  // Pega aquí el enlace que hayas copiado desde la celda de Google Colab.
+  // Cuando una URL exista, aparecerá el botón activo junto a «Copiar código».
+  colab: {
+    inicial: "",
+    completo: "",
+    reto: "",
+  },
+  ecuaciones: {
+    energia: String.raw`E_c = \frac{1}{2}mv^2`,
+    sustitucion: String.raw`E_c = \frac{1}{2}(2\,\mathrm{kg})(3\,\mathrm{m/s})^2 = 9\,\mathrm{J}`,
+  },
   codigoInicial: `masa = 2.0       # masa en kg
 velocidad = 3.0  # velocidad en m/s
 energia = 0.5 * masa * velocidad ** 2

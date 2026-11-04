@@ -1,7 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function CodeBlock({ codigo, titulo }) {
+function enlaceColabValido(enlace) {
+  if (!enlace) return null;
+  try {
+    const url = new URL(enlace);
+    return url.protocol === "https:" && url.hostname === "colab.research.google.com"
+      ? url.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+export default function CodeBlock({ codigo, titulo, colabUrl = "" }) {
   const [estado, setEstado] = useState("inicial");
+  const enlaceColab = enlaceColabValido(colabUrl);
   const temporizador = useRef(null);
 
   useEffect(() => {
@@ -28,14 +41,26 @@ export default function CodeBlock({ codigo, titulo }) {
       <div className="barra-codigo">
         <span>Python</span>
 
-        <button
-          type="button"
-          className="boton-copiar"
-          onClick={copiarCodigo}
-          aria-label={`Copiar código: ${titulo}`}
-        >
-          {estado === "copiado" ? "¡Copiado!" : "Copiar código"}
-        </button>
+        <div className="acciones-codigo">
+          <button
+            type="button"
+            className="boton-copiar"
+            onClick={copiarCodigo}
+            aria-label={`Copiar código: ${titulo}`}
+          >
+            {estado === "copiado" ? "¡Copiado!" : "Copiar código"}
+          </button>
+          {enlaceColab ? (
+            <a className="boton-colab" href={enlaceColab} target="_blank" rel="noopener noreferrer"
+               aria-label={`Abrir en Google Colab: ${titulo}`}>
+              ↗ Abrir en Colab
+            </a>
+          ) : (
+            <span className="boton-colab deshabilitado" title="Enlace de Colab pendiente de agregar">
+              ↗ Colab pendiente
+            </span>
+          )}
+        </div>
       </div>
 
       <pre>

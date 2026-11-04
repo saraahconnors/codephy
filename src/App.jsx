@@ -35,6 +35,29 @@ function enlaceEjemplo(id) {
   return `#/ejemplo/${id}`;
 }
 
+// El icono de pestaña representa la sección actual y usa los SVG ya incluidos.
+function iconoDeRuta(ruta, ejemplo) {
+  if (ruta === "/") return "atom";
+  if (ruta === "/aprender" || ruta.startsWith("/leccion/")) return "terminal";
+  if (ruta === "/galeria") return "folder";
+  if (ruta === "/areas") return "atom";
+  if (ejemplo) {
+    const porArea = {
+      "Mecánica": "mechanics",
+      "Óptica": "optics",
+      "Calor, ondas y fluidos": "thermowaves",
+      "Electromagnetismo": "electromagnetism",
+      "Fenomenología cuántica y relativista": "quantum",
+      "Métodos numéricos": "numeric",
+      "Álgebra lineal": "linear",
+      "Análisis vectorial": "vector",
+      "Funciones especiales": "special",
+    };
+    return porArea[ejemplo.area] || "measurement";
+  }
+  return "atom";
+}
+
 function App() {
   const [ruta, setRuta] = useState(leerRuta);
 
@@ -68,6 +91,16 @@ function App() {
       (esLeccion ? "Variables y tipos de datos" : ejemploActual?.titulo ?? paginaActual?.nombre) ?? "Página no encontrada";
 
     document.title = `${titulo} | CodePhy`;
+    const icono = iconoDeRuta(ruta, ejemploActual);
+    const iconUrl = `${import.meta.env.BASE_URL}icons/${icono}.svg`;
+    let favicon = document.querySelector('link[rel="icon"]');
+    if (!favicon) {
+      favicon = document.createElement("link");
+      favicon.rel = "icon";
+      document.head.appendChild(favicon);
+    }
+    favicon.type = "image/svg+xml";
+    favicon.href = iconUrl;
     window.scrollTo(0, 0);
     document.getElementById("contenido")?.focus();
   }, [ruta, ejemploActual, paginaActual, esLeccion]);
@@ -317,6 +350,7 @@ function App() {
               key={ejemploActual.id}
               codigo={ejemploActual.codigo}
               titulo={ejemploActual.titulo}
+              colabUrl={ejemploActual.colabUrl}
             />
 
             <h2>Resultado de referencia</h2>

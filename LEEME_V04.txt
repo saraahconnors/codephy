@@ -1,0 +1,41 @@
+CODEPHY RETRO v0.4 — LaTeX, Google Colab y favicon por sección
+============================================================
+
+1) Descomprime este ZIP dentro de la RAÍZ de tu proyecto python-fisica.
+2) Reemplaza los archivos cuando Windows lo solicite.
+3) En la terminal de VS Code, dentro de python-fisica, ejecuta:
+
+   npm install
+   npm run dev
+
+IMPORTANTE: npm install es necesario para instalar KaTeX y actualizar
+package-lock.json, porque la versión 0.4 incorpora una dependencia nueva.
+Si no tienes Internet durante npm install, esa instalación no podrá completarse.
+
+QUÉ CAMBIÓ:
+- Renderizado real de LaTeX con KaTeX en la lección de energía cinética.
+- Botón «Abrir en Colab» al lado de «Copiar código» en todos los ejemplos.
+- Si falta la URL de un ejemplo, muestra «Colab pendiente» (no inventa enlaces).
+- Favicon dinámico según la ruta (Inicio, Aprender, Galería, Áreas, ejemplos).
+- No se cambió la secuencia de navegación ni los textos del resto del sitio.
+
+CÓMO COLOCAR TUS ENLACES DE COLAB:
+- Lección: src/data/lecciones/python/01-variables.js -> objeto colab.
+  Ej.: completo: "https://colab.research.google.com/...#scrollTo=...",
+- Galería: src/data/ejemplos.js -> propiedad colabUrl de cada ejemplo.
+- Copia desde Colab el enlace que deseas utilizar y pégalo tal cual.
+- Comprueba haciendo clic que abra la celda deseada: la URL no ejecuta automáticamente.
+- El notebook original debe permitir acceso de lectura a los estudiantes;
+  ellos podrán experimentar en una copia propia sin modificar tu original.
+- La aplicación solo habilita enlaces HTTPS con dominio colab.research.google.com.
+
+FAVICON:
+- Inicio y Áreas: átomo; Aprender y Lección: terminal;
+  Galería: carpeta; ejemplos: icono según su área (Mecánica/Óptica/etc.).
+- El favicon cambia entre las RUTAS existentes, no entre tarjetas de la misma página.
+- Si no se actualiza, prueba Ctrl+F5 o una ventana privada.
+
+ANTES DE PUBLICAR:
+   npm run build
+   git status
+Revisa y confirma los cambios antes de commit/push.

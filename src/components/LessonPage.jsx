@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CodeBlock from "./CodeBlock.jsx";
 import PixelIcon from "./PixelIcon.jsx";
+import MathEquation from "./MathEquation.jsx";
 import { leccionVariables as leccion } from "../data/lecciones/python/01-variables.js";
 
 const respuestas = [
@@ -38,7 +39,7 @@ export default function LessonPage() {
             <p className="etiqueta">01 / CONCEPTO</p>
             <h2>¿Qué es una variable?</h2>
             <p>En Python, una variable es un nombre asociado a un valor. Por ejemplo, podemos guardar la masa y la velocidad de un objeto para utilizarlas en un cálculo físico.</p>
-            <CodeBlock codigo={leccion.codigoInicial} titulo="Primer cálculo de energía cinética" />
+            <CodeBlock codigo={leccion.codigoInicial} titulo="Primer cálculo de energía cinética" colabUrl={leccion.colab.inicial} />
             <p>El signo <code>=</code> <strong>asigna</strong> un valor; no significa que Python esté comprobando una igualdad matemática. Los comentarios que comienzan con <code>#</code> explican qué representan los datos y no se ejecutan.</p>
             <div className="leccion-nota"><strong>Observa:</strong> <code>**</code> es el operador de potencia; <code>velocidad ** 2</code> significa velocidad al cuadrado.</div>
           </section>
@@ -61,11 +62,11 @@ export default function LessonPage() {
             <p className="etiqueta">03 / APLICACIÓN FÍSICA</p>
             <h2>Calcula la energía cinética</h2>
             <p>Para un objeto de masa <em>m</em> y rapidez <em>v</em>, la energía cinética clásica es:</p>
-            <div className="ecuacion-leccion" aria-label="Energía cinética igual a un medio de masa por velocidad al cuadrado">E<sub>c</sub> = ½ m v<sup>2</sup></div>
+            <MathEquation latex={leccion.ecuaciones.energia} label="Energía cinética igual a un medio por masa por velocidad al cuadrado" />
             <p>Si la masa es 2 kg y la rapidez es 3 m/s, sustituimos los valores:</p>
-            <div className="ecuacion-leccion" aria-label="Un medio por dos por tres al cuadrado igual a nueve julios">E<sub>c</sub> = ½ (2)(3²) = 9 J</div>
+            <MathEquation latex={leccion.ecuaciones.sustitucion} label="La energía cinética con dos kilogramos y tres metros por segundo es nueve julios" />
             <p>En el código utilizamos los mismos valores. La energía se expresa en <strong>julios (J)</strong>, equivalentes a kg·m²/s².</p>
-            <CodeBlock codigo={leccion.codigoCompleto} titulo="Programa completo de energía cinética" />
+            <CodeBlock codigo={leccion.codigoCompleto} titulo="Programa completo de energía cinética" colabUrl={leccion.colab.completo} />
             <h3>Resultado esperado</h3>
             <pre className="resultado"><samp>Energía cinética: 9.00 J</samp></pre>
             <div className="leccion-nota"><strong>Interpretación:</strong> con los datos indicados, el objeto tiene una energía cinética de 9 J. Que el programa se ejecute sin errores no garantiza por sí solo que las unidades o el modelo físico sean correctos.</div>
@@ -88,9 +89,9 @@ export default function LessonPage() {
           <section id="reto" className="leccion-bloque">
             <p className="etiqueta">05 / RETO DE LABORATORIO</p>
             <h2>Modifica el código y comprueba</h2>
-            <ol className="pasos-leccion"><li>Copia el programa completo en Google Colab o en tu instalación de Python.</li><li>Modifica la rapidez a 6 m/s y predice el resultado antes de ejecutarlo.</li><li>Ejecuta el programa y compara su salida con tu predicción.</li><li>Prueba cambiar la masa y explica por qué cambia la energía.</li></ol>
+            <ol className="pasos-leccion"><li>Abre el ejemplo con «Abrir en Colab» cuando tenga enlace, o copia el programa a un cuaderno propio.</li><li>Modifica la rapidez a 6 m/s y predice el resultado antes de ejecutarlo.</li><li>Ejecuta el programa y compara su salida con tu predicción.</li><li>Prueba cambiar la masa y explica por qué cambia la energía.</li></ol>
             <button className="boton" type="button" aria-expanded={mostrarReto} onClick={()=>setMostrarReto(v=>!v)}>{mostrarReto ? "Ocultar solución de referencia ↑" : "Ver solución de referencia ↓"}</button>
-            {mostrarReto && <div className="solucion-leccion"><CodeBlock codigo={leccion.codigoReto} titulo="Solución del reto de energía cinética" /><pre className="resultado"><samp>Energía cinética: 36.00 J</samp></pre></div>}
+            {mostrarReto && <div className="solucion-leccion"><CodeBlock codigo={leccion.codigoReto} titulo="Solución del reto de energía cinética" colabUrl={leccion.colab.reto} /><pre className="resultado"><samp>Energía cinética: 36.00 J</samp></pre></div>}
             <p className="aviso">La página muestra código y resultados preparados. La ejecución de Python se realiza en un entorno externo; no se ejecuta dentro de CodePhy.</p>
           </section>
 

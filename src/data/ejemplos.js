@@ -1,4 +1,6 @@
 // Contenido demostrativo para comprobar la interfaz.
+// Coloca en colabUrl el enlace compartido al notebook/celda correspondiente.
+// Mientras sea vacío, el botón indicará «Colab pendiente».
 
 export const modulos = [
   "Fundamentos de Python",
@@ -10,6 +12,7 @@ export const modulos = [
 
 export const ejemplos = [
   {
+    colabUrl: "",
     id: "promedio-mediciones",
     titulo: "Promedio de mediciones",
     modulo: "Fundamentos de Python",
@@ -25,6 +28,7 @@ print(f"Longitud promedio: {promedio:.2f} cm")`,
     nota: "El promedio por sí solo no expresa la dispersión ni la incertidumbre.",
   },
   {
+    colabUrl: "",
     id: "posicion-mru",
     titulo: "Movimiento rectilíneo uniforme",
     modulo: "Fundamentos de Python",
@@ -48,6 +52,7 @@ for tiempo in tiempos:
     nota: "El modelo supone velocidad constante.",
   },
   {
+    colabUrl: "",
     id: "energia-foton",
     titulo: "Energía de un fotón",
     modulo: "Fundamentos de Python",
