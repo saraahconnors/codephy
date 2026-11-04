@@ -1,0 +1,24 @@
+CODEPHY — RETRO PIXEL ARCADE v0.2
+
+Descomprime el contenido de este ZIP directamente DENTRO de la carpeta raíz python-fisica.
+Acepta reemplazar archivos existentes. No sustituyas la carpeta src completa.
+
+Cambios:
+- src/App.jsx: categorías de física y matemáticas con íconos específicos.
+- src/App.css: disposición de tarjetas por disciplina.
+- src/components/PixelIcon.jsx: carga de íconos SVG locales.
+- public/icons/: 15 íconos pixel art originales (SVG) editables.
+- public/favicon.svg: ícono de la pestaña del navegador.
+- index.html: idioma español, título y enlace al favicon compatible con GitHub Pages.
+
+No cambia src/data/ejemplos.js, src/components/CodeBlock.jsx, configuración de Vite, ni Git.
+Los temas que aún no tienen contenido muestran "Próximamente".
+
+PARA PROBAR EN VS CODE:
+1. Abre la terminal en la carpeta python-fisica.
+2. Ejecuta: npm run dev
+3. Abre la URL que indique Vite (habitualmente http://localhost:5173/codephy/).
+4. Si el favicon no cambia, refresca con Ctrl+F5 o abre una ventana de incógnito.
+5. Antes de publicar, comprueba: npm run build
+
+NOTA: El ZIP no incluye dependencias, node_modules, ni archivos .git.

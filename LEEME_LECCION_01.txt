@@ -1,0 +1,13 @@
+CodePhy — Lección piloto 01: Variables y tipos de datos
+
+1. Extrae este ZIP en la raíz de tu carpeta python-fisica, sustituyendo los archivos existentes.
+2. En VS Code abre la terminal: npm run dev
+3. Visita la ruta local de Vite, después Aprender programación → 01 · Variables y tipos de datos.
+4. No es necesario hacer git push.
+
+Archivos modificados: src/App.jsx y src/App.css.
+Archivos nuevos: src/components/LessonPage.jsx y src/data/lecciones/python/01-variables.js.
+No reemplaza los íconos, los ejemplos ni la configuración de GitHub Pages.
+
+Si tu versión local tiene cambios posteriores a CodePhy Retro v0.2, respáldalos antes de reemplazar.
+Python no se ejecuta en la página, en concordancia con el alcance de tu proyecto.

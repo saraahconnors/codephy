@@ -1,7 +1,24 @@
 import { useEffect, useState } from "react";
 import CodeBlock from "./components/CodeBlock.jsx";
+import LessonPage from "./components/LessonPage.jsx";
+import PixelIcon from "./components/PixelIcon.jsx";
 import { ejemplos, modulos } from "./data/ejemplos.js";
 import "./App.css";
+
+// Categorías visibles aunque todavía no existan lecciones para ellas.
+const categoriasFisica = [
+  { nombre: "Mecánica clásica", icono: "mechanics", areas: ["Mecánica"] },
+  { nombre: "Calor, ondas y fluidos", icono: "thermowaves", areas: ["Calor, ondas y fluidos"] },
+  { nombre: "Óptica", icono: "optics", areas: ["Óptica"] },
+  { nombre: "Fenomenología cuántica y relativista", icono: "quantum", areas: ["Fenomenología cuántica y relativista"] },
+  { nombre: "Electromagnetismo", icono: "electromagnetism", areas: ["Electromagnetismo"] },
+];
+const categoriasMatematicas = [
+  { nombre: "Análisis vectorial", icono: "vector", areas: ["Análisis vectorial"] },
+  { nombre: "Métodos numéricos", icono: "numeric", areas: ["Métodos numéricos"] },
+  { nombre: "Funciones especiales", icono: "special", areas: ["Funciones especiales"] },
+  { nombre: "Álgebra lineal", icono: "linear", areas: ["Álgebra lineal"] },
+];
 
 const paginas = [
   { ruta: "/", nombre: "Inicio" },
@@ -26,8 +43,13 @@ function App() {
   );
 
   const paginaActual = paginas.find((pagina) => pagina.ruta === ruta);
-  const areas = [...new Set(ejemplos.map((ejemplo) => ejemplo.area))];
-  const rutaValida = Boolean(paginaActual || ejemploActual);
+  const areasCatalogadas = new Set(
+    [...categoriasFisica, ...categoriasMatematicas].flatMap((categoria) => categoria.areas),
+  );
+  const areasAdicionales = [...new Set(ejemplos.map((ejemplo) => ejemplo.area))]
+    .filter((area) => !areasCatalogadas.has(area));
+  const esLeccion = ruta === "/leccion/python-variables";
+  const rutaValida = Boolean(paginaActual || ejemploActual || esLeccion);
 
   useEffect(() => {
     function actualizarRuta() {
@@ -43,12 +65,12 @@ function App() {
 
   useEffect(() => {
     const titulo =
-      ejemploActual?.titulo ?? paginaActual?.nombre ?? "Página no encontrada";
+      (esLeccion ? "Variables y tipos de datos" : ejemploActual?.titulo ?? paginaActual?.nombre) ?? "Página no encontrada";
 
     document.title = `${titulo} | CodePhy`;
     window.scrollTo(0, 0);
     document.getElementById("contenido")?.focus();
-  }, [ruta, ejemploActual, paginaActual]);
+  }, [ruta, ejemploActual, paginaActual, esLeccion]);
 
   return (
     <>
@@ -65,10 +87,8 @@ function App() {
 
       <header className="cabecera">
         <a className="marca" href="#/" aria-label="CodePhy: inicio">
-          <span className="marca-simbolo" aria-hidden="true">
-            {">"}
-          </span>
-          CodePhy
+          <PixelIcon name="terminal" size={36} />
+          CodePhy<span className="marca-exe">.exe</span>
           <span className="cursor-marca" aria-hidden="true">
             _
           </span>
@@ -95,13 +115,14 @@ function App() {
         {ruta === "/" && (
           <>
             <section className="portada">
-              <p className="etiqueta">EXPLORA · PROGRAMA · INTERPRETA</p>
-              <h1>Aprende a programar con problemas de física.</h1>
+              <p className="etiqueta">▸ INICIAR SISTEMA / CODEPHY v0.1</p>
+              <h1><span className="titulo-amarillo">CodePhy</span><br />Programación en Python para Física<span className="cursor-marca">_</span></h1>
               <p className="introduccion">
                 Comprende el código, modifica sus parámetros e interpreta sus
                 resultados. Aprende desde los fundamentos o consulta
                 herramientas para tus tareas y prácticas.
               </p>
+              <div className="acciones-portada"><a className="boton boton-principal" href="#/aprender">▶ Iniciar curso</a><a className="boton" href="#/galeria">Explorar galería →</a></div>
               <p className="aviso">
                 Prototipo con contenido demostrativo. Python se ejecuta fuera de
                 esta plataforma; los resultados mostrados son referencias
@@ -110,25 +131,25 @@ function App() {
             </section>
 
             <section className="seccion">
-              <h2>Tres formas de explorar</h2>
+              <h2>▸ Selecciona una ruta</h2>
 
               <div className="recorridos">
                 <a className="tarjeta acceso verde" href="#/aprender">
-                  <span className="etiqueta">01 · APRENDER</span>
+                  <PixelIcon name="terminal" size={52} /><span className="etiqueta">01 · APRENDER</span>
                   <h3>Ruta de programación</h3>
                   <p>Recorre los módulos desde los fundamentos.</p>
                   <span className="acceso-enlace">Ver la ruta →</span>
                 </a>
 
                 <a className="tarjeta acceso azul" href="#/galeria">
-                  <span className="etiqueta">02 · CONSULTAR</span>
+                  <PixelIcon name="folder" size={52} /><span className="etiqueta">02 · CONSULTAR</span>
                   <h3>Galería de código</h3>
                   <p>Encuentra programas por tarea y resultado.</p>
                   <span className="acceso-enlace">Explorar código →</span>
                 </a>
 
                 <a className="tarjeta acceso amarillo" href="#/areas">
-                  <span className="etiqueta">03 · EXPLORAR</span>
+                  <PixelIcon name="atom" size={52} /><span className="etiqueta">03 · EXPLORAR</span>
                   <h3>Áreas de física</h3>
                   <p>Encuentra recursos por su contexto físico.</p>
                   <span className="acceso-enlace">Consultar áreas →</span>
@@ -152,12 +173,14 @@ function App() {
 
                 return (
                   <li className="tarjeta modulo" key={modulo}>
-                    <span className="numero-modulo" aria-hidden="true">
+                    <PixelIcon name={indice===0 ? "terminal" : indice===1 ? "folder" : indice===2 ? "graph" : indice===3 ? "numeric" : "flask"} size={48}/><span className="numero-modulo" aria-hidden="true">
                       {String(indice + 1).padStart(2, "0")}
                     </span>
 
                     <div>
                       <h2 className="titulo-tarjeta">{modulo}</h2>
+
+                      {indice === 0 && <div className="leccion-destacada"><span className="etiqueta">NUEVA · LECCIÓN COMPLETA</span><a href="#/leccion/python-variables">01 · Variables y tipos de datos →</a><p>Aprende con una aplicación de energía cinética y un ejercicio interactivo.</p></div>}
 
                       {recursos.length > 0 ? (
                         <ul className="lista-recursos">
@@ -194,7 +217,7 @@ function App() {
             <div className="recorridos">
               {ejemplos.map((ejemplo) => (
                 <article className="tarjeta ficha" key={ejemplo.id}>
-                  <p className="categoria">{ejemplo.tarea}</p>
+                  <PixelIcon name={ejemplo.id === "posicion-mru" ? "graph" : ejemplo.id === "energia-foton" ? "optics" : "measurement"} size={48}/><p className="categoria">{ejemplo.tarea}</p>
                   <h2 className="titulo-tarjeta">{ejemplo.titulo}</h2>
                   <p>{ejemplo.descripcion}</p>
 
@@ -217,29 +240,65 @@ function App() {
             <p className="etiqueta">CONSULTA TEMÁTICA</p>
             <h1>Áreas de física</h1>
             <p>
-              Las categorías se generan a partir de los ejemplos disponibles.
+              Explora los ejemplos por disciplina. Las categorías sin recursos todavía están
+              señaladas como próximas incorporaciones.
             </p>
-
-            <div className="recorridos">
-              {areas.map((area) => (
-                <article className="tarjeta" key={area}>
-                  <h2 className="titulo-tarjeta">{area}</h2>
-                  <ul className="lista-recursos">
-                    {ejemplos
-                      .filter((ejemplo) => ejemplo.area === area)
-                      .map((ejemplo) => (
-                        <li key={ejemplo.id}>
-                          <a href={enlaceEjemplo(ejemplo.id)}>
-                            {ejemplo.titulo}
-                          </a>
-                        </li>
-                      ))}
-                  </ul>
-                </article>
-              ))}
+            <h2 className="subtitulo-areas">▸ Física</h2>
+            <div className="recorridos areas-grid">
+              {categoriasFisica.map((categoria) => {
+                const recursos = ejemplos.filter((ejemplo) => categoria.areas.includes(ejemplo.area));
+                return (
+                  <article className="tarjeta tarjeta-area" key={categoria.nombre}>
+                    <PixelIcon name={categoria.icono} size={64} />
+                    <h3 className="titulo-tarjeta">{categoria.nombre}</h3>
+                    {recursos.length ? (
+                      <ul className="lista-recursos">
+                        {recursos.map((ejemplo) => <li key={ejemplo.id}><a href={enlaceEjemplo(ejemplo.id)}>{ejemplo.titulo}</a></li>)}
+                      </ul>
+                    ) : <p className="estado estado-pendiente">Próximamente · sin ejemplos publicados</p>}
+                  </article>
+                );
+              })}
             </div>
+            <h2 className="subtitulo-areas">▸ Herramientas matemáticas</h2>
+            <div className="recorridos areas-grid">
+              {categoriasMatematicas.map((categoria) => {
+                const recursos = ejemplos.filter((ejemplo) => categoria.areas.includes(ejemplo.area));
+                return (
+                  <article className="tarjeta tarjeta-area" key={categoria.nombre}>
+                    <PixelIcon name={categoria.icono} size={64} />
+                    <h3 className="titulo-tarjeta">{categoria.nombre}</h3>
+                    {recursos.length ? (
+                      <ul className="lista-recursos">
+                        {recursos.map((ejemplo) => <li key={ejemplo.id}><a href={enlaceEjemplo(ejemplo.id)}>{ejemplo.titulo}</a></li>)}
+                      </ul>
+                    ) : <p className="estado estado-pendiente">Próximamente · sin ejemplos publicados</p>}
+                  </article>
+                );
+              })}
+            </div>
+            {areasAdicionales.length > 0 && (
+              <>
+                <h2 className="subtitulo-areas">▸ Otros temas</h2>
+                <div className="recorridos areas-grid">
+                  {areasAdicionales.map((area) => (
+                    <article className="tarjeta tarjeta-area" key={area}>
+                      <PixelIcon name="measurement" size={64} />
+                      <h3 className="titulo-tarjeta">{area}</h3>
+                      <ul className="lista-recursos">
+                        {ejemplos.filter((ejemplo) => ejemplo.area === area).map((ejemplo) => (
+                          <li key={ejemplo.id}><a href={enlaceEjemplo(ejemplo.id)}>{ejemplo.titulo}</a></li>
+                        ))}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              </>
+            )}
           </section>
         )}
+
+        {esLeccion && <LessonPage />}
 
         {ejemploActual && (
           <article className="pagina">
