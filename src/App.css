@@ -24,3 +24,31 @@
 .ecuacion-katex .katex-display {margin:.25rem 0}
 .ecuacion-katex .katex {font-size:1.13em}
 @media(max-width:520px){.barra-codigo{align-items:flex-start}.acciones-codigo{width:100%;justify-content:flex-start}.ecuacion-katex .katex{font-size:1em}}
+
+/* v0.5.0 · Resultados de referencia revelables */
+.resultado-interactivo{margin:1rem 0 1.65rem;border:2px solid #73609b;background:#19142d;box-shadow:4px 4px 0 #090612}
+.resultado-interactivo-barra{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;padding:.8rem 1rem;background:#302047;border-bottom:1px solid #73609b}
+.boton-revelar{font-family:'Pixelify Sans',monospace;font-size:.96rem;cursor:pointer;min-height:38px;background:#382756;color:#ffe1a3}
+.resultado-invitacion,.resultado-interactivo-contenido{padding:1rem;margin:0;color:#d5cce3}
+.resultado-interactivo-contenido .salida-consola{white-space:pre-wrap;overflow-x:auto;padding:1rem;background:#0e1120;color:#77e4d2}
+.resultado-mixto{display:grid;gap:1rem}
+.resultado-pendiente{border:1px dashed #8f74aa;padding:1rem;color:#eadbb8}
+.figura-resultado{margin:0;padding:.75rem;background:#121221;border:1px solid #5e5281}
+.figura-resultado img,.figura-resultado video{display:block;max-width:100%;width:auto;height:auto;max-height:540px;margin:auto;object-fit:contain}
+.figura-resultado figcaption{padding:.75rem .25rem 0;color:#d7cbe6;font-size:.94rem}
+.resultado-interactivo .tabla-leccion{margin:0}
+.resultado-interactivo .tabla-leccion td{overflow-wrap:anywhere}
+@media(max-width:600px){.resultado-interactivo-barra{align-items:stretch}.resultado-interactivo-barra .boton{width:100%}}
+
+/* Laboratorio Python: prueba aislada de ejecución local */
+.laboratorio-pagina{max-width:950px}.laboratorio-pagina>h1{font-family:Silkscreen,monospace;font-size:clamp(1.5rem,3vw,2.3rem)}
+.laboratorio-nota{padding:.8rem 1rem;border-left:3px solid #68decf;background:#211834;color:#ddd1eb}
+.laboratorio-ejemplos,.laboratorio-acciones{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;margin:1rem 0}
+.laboratorio-ejemplos .boton{font-size:.9rem;cursor:pointer}
+.laboratorio-etiqueta{display:block;margin:1rem 0 .5rem;color:#f8d679;font-family:Silkscreen,monospace;font-size:.85rem}
+.laboratorio-editor{display:block;width:100%;min-height:290px;resize:vertical;box-sizing:border-box;padding:1.2rem;border:2px solid #9265bd;border-radius:0;background:#111322;color:#9de8d9;font:15px/1.6 Consolas,'Courier New',monospace;tab-size:4;outline-offset:3px}
+.laboratorio-editor:focus{outline:2px solid #f7d366}
+.laboratorio-acciones .boton{cursor:pointer}.laboratorio-acciones .boton:disabled{opacity:.5;cursor:not-allowed}
+.laboratorio-estado{color:#f5da9a}.laboratorio-salida{min-height:110px;margin:1.5rem 0;padding:1rem 1.2rem;border:2px solid #7a5ca4;background:#181329}
+.laboratorio-salida h2{color:#f7d366;font-size:1.1rem}.laboratorio-salida pre{overflow:auto;max-height:460px;padding:1rem;background:#0d1220;color:#82edd4;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.5 Consolas,'Courier New',monospace}
+.laboratorio-salida pre.laboratorio-error{color:#ffb3a9}

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import CodeBlock from "./components/CodeBlock.jsx";
+import EjemploCodigo from "./components/EjemploCodigo.jsx";
 import LessonPage from "./components/LessonPage.jsx";
+import LaboratorioPython from "./components/LaboratorioPython.jsx";
 import PixelIcon from "./components/PixelIcon.jsx";
 import { ejemplos, modulos } from "./data/ejemplos.js";
+import { lecciones, buscarLeccion } from "./data/lecciones/index.js";
 import "./App.css";
 
 // Categorías visibles aunque todavía no existan lecciones para ellas.
@@ -25,6 +27,7 @@ const paginas = [
   { ruta: "/aprender", nombre: "Aprender programación" },
   { ruta: "/galeria", nombre: "Galería de código" },
   { ruta: "/areas", nombre: "Áreas de física" },
+  { ruta: "/laboratorio", nombre: "Laboratorio Python" },
 ];
 
 function leerRuta() {
@@ -40,6 +43,7 @@ function iconoDeRuta(ruta, ejemplo) {
   if (ruta === "/") return "atom";
   if (ruta === "/aprender" || ruta.startsWith("/leccion/")) return "terminal";
   if (ruta === "/galeria") return "folder";
+  if (ruta === "/laboratorio") return "terminal";
   if (ruta === "/areas") return "atom";
   if (ejemplo) {
     const porArea = {
@@ -71,7 +75,8 @@ function App() {
   );
   const areasAdicionales = [...new Set(ejemplos.map((ejemplo) => ejemplo.area))]
     .filter((area) => !areasCatalogadas.has(area));
-  const esLeccion = ruta === "/leccion/python-variables";
+  const leccionActual = ruta.startsWith("/leccion/") ? buscarLeccion(ruta.slice("/leccion/".length)) : null;
+  const esLeccion = Boolean(leccionActual);
   const rutaValida = Boolean(paginaActual || ejemploActual || esLeccion);
 
   useEffect(() => {
@@ -88,7 +93,7 @@ function App() {
 
   useEffect(() => {
     const titulo =
-      (esLeccion ? "Variables y tipos de datos" : ejemploActual?.titulo ?? paginaActual?.nombre) ?? "Página no encontrada";
+      (esLeccion ? leccionActual.titulo : ejemploActual?.titulo ?? paginaActual?.nombre) ?? "Página no encontrada";
 
     document.title = `${titulo} | CodePhy`;
     const icono = iconoDeRuta(ruta, ejemploActual);
@@ -103,7 +108,7 @@ function App() {
     favicon.href = iconUrl;
     window.scrollTo(0, 0);
     document.getElementById("contenido")?.focus();
-  }, [ruta, ejemploActual, paginaActual, esLeccion]);
+  }, [ruta, ejemploActual, paginaActual, esLeccion, leccionActual]);
 
   return (
     <>
@@ -148,7 +153,7 @@ function App() {
         {ruta === "/" && (
           <>
             <section className="portada">
-              <p className="etiqueta">▸ INICIAR SISTEMA / CODEPHY v0.1</p>
+              <p className="etiqueta">▸ INICIAR SISTEMA / CODEPHY v0.5.0</p>
               <h1><span className="titulo-amarillo">CodePhy</span><br />Programación en Python para Física<span className="cursor-marca">_</span></h1>
               <p className="introduccion">
                 Comprende el código, modifica sus parámetros e interpreta sus
@@ -157,9 +162,7 @@ function App() {
               </p>
               <div className="acciones-portada"><a className="boton boton-principal" href="#/aprender">▶ Iniciar curso</a><a className="boton" href="#/galeria">Explorar galería →</a></div>
               <p className="aviso">
-                Prototipo con contenido demostrativo. Python se ejecuta fuera de
-                esta plataforma; los resultados mostrados son referencias
-                preparadas.
+                Consulta lecciones y ejemplos, o prueba programas cortos en el Laboratorio Python.
               </p>
             </section>
 
@@ -213,7 +216,7 @@ function App() {
                     <div>
                       <h2 className="titulo-tarjeta">{modulo}</h2>
 
-                      {indice === 0 && <div className="leccion-destacada"><span className="etiqueta">NUEVA · LECCIÓN COMPLETA</span><a href="#/leccion/python-variables">01 · Variables y tipos de datos →</a><p>Aprende con una aplicación de energía cinética y un ejercicio interactivo.</p></div>}
+                      {lecciones.filter(l => l.modulo === modulo).map(l => <div className="leccion-destacada" key={l.id}><span className="etiqueta">LECCIÓN · {l.nivel.toUpperCase()}</span><a href={`#/leccion/${l.id}`}>{l.numero} · {l.titulo} →</a><p>{l.subtitulo}</p></div>)}
 
                       {recursos.length > 0 ? (
                         <ul className="lista-recursos">
@@ -254,10 +257,6 @@ function App() {
                   <h2 className="titulo-tarjeta">{ejemplo.titulo}</h2>
                   <p>{ejemplo.descripcion}</p>
 
-                  <h3 className="titulo-previa">Resultado de referencia</h3>
-                  <pre className="resultado">
-                    <samp>{ejemplo.resultado}</samp>
-                  </pre>
 
                   <a className="boton" href={enlaceEjemplo(ejemplo.id)}>
                     Ver programa →
@@ -331,7 +330,9 @@ function App() {
           </section>
         )}
 
-        {esLeccion && <LessonPage />}
+        {ruta === "/laboratorio" && <LaboratorioPython />}
+
+        {esLeccion && <LessonPage key={leccionActual.id} leccion={leccionActual} />}
 
         {ejemploActual && (
           <article className="pagina">
@@ -346,17 +347,7 @@ function App() {
             </div>
 
             <h2>Código Python</h2>
-            <CodeBlock
-              key={ejemploActual.id}
-              codigo={ejemploActual.codigo}
-              titulo={ejemploActual.titulo}
-              colabUrl={ejemploActual.colabUrl}
-            />
-
-            <h2>Resultado de referencia</h2>
-            <pre className="resultado">
-              <samp>{ejemploActual.resultado}</samp>
-            </pre>
+            <EjemploCodigo key={ejemploActual.id} ejemplo={ejemploActual} />
 
             <p className="aviso">{ejemploActual.nota}</p>
           </article>
