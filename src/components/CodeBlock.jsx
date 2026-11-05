@@ -55,11 +55,7 @@ export default function CodeBlock({ codigo, titulo, colabUrl = "" }) {
                aria-label={`Abrir en Google Colab: ${titulo}`}>
               ↗ Abrir en Colab
             </a>
-          ) : (
-            <span className="boton-colab deshabilitado" title="Enlace de Colab pendiente de agregar">
-              ↗ Colab pendiente
-            </span>
-          )}
+          ) : null}
         </div>
       </div>
 

@@ -24,7 +24,7 @@ export const ejemplos = [
 promedio = sum(longitudes) / len(longitudes)
 
 print(f"Longitud promedio: {promedio:.2f} cm")`,
-    resultado: "Longitud promedio: 10.30 cm",
+    resultado: { tipo: "texto", contenido: "Longitud promedio: 10.30 cm" },
     nota: "El promedio por sí solo no expresa la dispersión ni la incertidumbre.",
   },
   {
@@ -44,11 +44,7 @@ print("t (s) | x (m)")
 for tiempo in tiempos:
     posicion = posicion_inicial + velocidad * tiempo
     print(f"{tiempo:5.1f} | {posicion:5.1f}")`,
-    resultado: `t (s) | x (m)
-  0.0 |   2.0
-  1.0 |   5.0
-  2.0 |   8.0
-  3.0 |  11.0`,
+    resultado: { tipo: "tabla", columnas: ["t (s)", "x (m)"], filas: [["0.0", "2.0"], ["1.0", "5.0"], ["2.0", "8.0"], ["3.0", "11.0"]] },
     nota: "El modelo supone velocidad constante.",
   },
   {
@@ -74,7 +70,7 @@ longitud_onda = 500e-9  # m
 energia = energia_foton(longitud_onda)
 
 print(f"Energía: {energia:.3e} J")`,
-    resultado: "Energía: 3.973e-19 J",
+    resultado: { tipo: "texto", contenido: "Energía: 3.973e-19 J" },
     nota: "La longitud de onda se expresa en metros y corresponde al vacío.",
   },
 ];
