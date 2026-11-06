@@ -1,0 +1,41 @@
+CodePhy v0.5.2 — Precarga de Pyodide y pruebas de gráficos
+
+ESTA ACTUALIZACIÓN SOLO MODIFICA TRES ARCHIVOS:
+  src/components/LaboratorioPython.jsx
+  src/workers/python.worker.js
+  src/App.css
+
+INSTALACIÓN
+1. En VS Code, abre la carpeta C:\Users\saraa\Proyectos\python-fisica.
+2. Haz una copia de seguridad o confirma que tus cambios previos están en Git.
+3. Extrae el ZIP dentro de python-fisica, conservando la estructura de carpetas.
+4. Reemplaza solamente los tres archivos indicados.
+5. Ejecuta npm run dev y abre la ruta /codephy/#/laboratorio.
+6. Ejecuta los ejemplos, en especial Caída libre, Movimiento parabólico,
+   Oscilador amortiguado e Histograma. Luego haz npm run build.
+
+PRUEBAS ADICIONALES
+- Modifica velocidad/ángulo y vuelve a ejecutar.
+- Prueba un error: print(variable_inexistente).
+- Prueba Detener con: while True: pass (detener pronto).
+- Comprueba que un gráfico se muestre y se actualice después de editar el código.
+- Prueba en ventana privada para medir el tiempo de la primera carga.
+
+VERSIONES Y LIMITACIONES
+Pyodide v0.29.5 desde jsDelivr; requiere Internet la primera vez.
+Matplotlib y NumPy pueden descargar archivos adicionales al primer uso.
+Solo gráficos PNG estáticos; no animación ni gráfica interactiva.
+La precarga se inicia al abrir el laboratorio, no al entrar al sitio entero.
+Si cierras el laboratorio, el intérprete se destruye; el navegador puede conservar
+archivos descargados en la caché. Detener reinicia el intérprete.
+No hay ejecución automática del código del estudiante.
+No se modifican App.jsx, rutas, lecciones ni enlaces de Colab.
+
+PUBLICACIÓN (después de compilar sin errores)
+  git status
+  git add src/components/LaboratorioPython.jsx src/workers/python.worker.js src/App.css
+  git commit -m "Probar Matplotlib y precarga en laboratorio Python"
+  git push origin main
+
+NOTA: Esta entrega no se ha probado en un navegador real; comprobar primero
+que Vite compile localmente y probar imágenes en el navegador antes de publicarla.

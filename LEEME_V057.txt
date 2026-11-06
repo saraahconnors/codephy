@@ -1,0 +1,33 @@
+CODEPHY v0.5.7 — ARCHIVOS REQUERIDOS Y SEGUNDA ACTIVIDAD CON DATOS
+
+NOVEDADES
+- Solo en las actividades CSV aparece el panel "Preparación de los datos".
+- Método A: descarga mediciones.csv, selecciónalo antes de ejecutar. El botón Ejecutar permanece bloqueado hasta que el trabajador confirme el archivo.
+- Método B: descarga el CSV y presiona Ejecutar. CodePhy abre el selector de archivos y, tras validar, ejecuta el código automáticamente.
+- Se verifica nombre exacto, cabeceras, mínimo de filas, números válidos y tamaño máximo de 1 MB.
+- Nueva actividad "Graficar datos CSV" para calcular y representar mediciones con código portátil de NumPy + Matplotlib.
+- La carga se realiza en el sistema de archivos temporal de Pyodide. Reiniciar Python borra los archivos.
+- No se cambia App.jsx, App.css ni las lecciones. Se conserva "Copiar código" y las demás funciones del laboratorio.
+
+INSTALACIÓN
+1. Copia de seguridad de C:\Users\saraa\Proyectos\python-fisica.
+2. Extrae este ZIP en esa carpeta, conservando las rutas src/components y src/workers.
+3. Abre terminal VS Code: npm run dev
+4. En el Laboratorio elige "Análisis de CSV". Comprueba que Ejecutar está bloqueado en Método A hasta cargar mediciones.csv.
+5. Descarga CSV, elige el archivo, ejecuta. Comprueba 6 mediciones, promedio 9.807 m/s² y descarga resultados.csv.
+6. Cambia a "Graficar datos CSV" y ejecuta: debe producir curva y línea media.
+7. Reinicia Python y comprueba que la carga se pierde. Elige Método B y pulsa Ejecutar: debe abrir selector de archivos y ejecutar tras seleccionar CSV válido.
+8. Prueba CSV con nombre distinto o cabeceras incorrectas: no debe ejecutar y debe explicar el error.
+9. Ejecuta npm run build antes de subir cambios.
+
+PUBLICACIÓN DESPUÉS DE PROBAR
+  git status
+  git add src/components/LaboratorioPython.jsx src/workers/python.worker.js
+  git commit -m "Validar archivos requeridos y graficar CSV en laboratorio"
+  git push origin main
+
+SIGUIENTE FASE
+Para crear lecciones de manejo de datos, reutilizaremos el flujo de preparación y validación. Se integrará con el editor de código de cada lección, tras validar esta versión en laboratorio. En Colab los alumnos deberán subir el CSV al panel Archivos; el código de análisis es el mismo.
+
+VALIDACIÓN DEL PAQUETE
+Sintaxis JSX revisada con Babel Parser y worker JS con node --check. No se completó vite build en este entorno por falta de la dependencia nativa Rolldown; verificar en computadora local.

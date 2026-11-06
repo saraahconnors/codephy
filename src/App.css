@@ -52,3 +52,53 @@
 .laboratorio-estado{color:#f5da9a}.laboratorio-salida{min-height:110px;margin:1.5rem 0;padding:1rem 1.2rem;border:2px solid #7a5ca4;background:#181329}
 .laboratorio-salida h2{color:#f7d366;font-size:1.1rem}.laboratorio-salida pre{overflow:auto;max-height:460px;padding:1rem;background:#0d1220;color:#82edd4;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.5 Consolas,'Courier New',monospace}
 .laboratorio-salida pre.laboratorio-error{color:#ffb3a9}
+
+/* v0.5.8 — navegación compacta, accesible y visible en móvil */
+.cabecera {position:sticky;top:0;z-index:100;padding:.55rem .9rem;background:#171226f5;border:1px solid #473660;box-shadow:0 5px 15px #0a081b88;backdrop-filter:blur(9px)}
+.cabecera-superior {display:flex;align-items:center;justify-content:space-between;gap:1rem;min-width:0}
+.cabecera .marca {display:flex;align-items:center;gap:.55rem;font-size:clamp(1.05rem,2vw,1.35rem);white-space:nowrap;min-width:0}
+.cabecera .marca .pixel-icon {flex-shrink:0}
+.cabecera .marca-exe {font-size:.8em}
+.cabecera .navegacion {display:flex;flex-wrap:nowrap;margin:.5rem 0 0;gap:.3rem;border:0;background:transparent}
+.cabecera .navegacion a {flex:1 1 0;min-width:0;min-height:40px;padding:.5rem .4rem;font-size:.85rem;white-space:nowrap}
+.boton-menu {display:none;border:1px solid #8062a9;background:#241936;color:#f2e8ff;padding:.55rem .7rem;min-height:44px;align-items:center;gap:.5rem;cursor:pointer;font:inherit}
+.contacto-pagina{max-width:800px}.contacto-tarjeta a:not(.boton){overflow-wrap:anywhere}.contacto-tarjeta .boton{margin:.5rem 0}
+.saltar-contenido{position:fixed;z-index:200}
+@media(max-width:720px){
+ .cabecera,main,.pie-contenido{width:min(100% - 1rem,1120px)}
+ .cabecera {padding:.4rem .6rem}
+ .cabecera .marca {font-size:1.1rem}
+ .cabecera .marca .pixel-icon {width:28px;height:28px}
+ .boton-menu {display:inline-flex}
+ .cabecera .navegacion{display:none;flex-direction:column;align-items:stretch;margin:.4rem 0 0;padding:.35rem 0;border-top:1px solid #473660}
+ .cabecera .navegacion.navegacion-abierta{display:flex}
+ .cabecera .navegacion a {flex:none;width:100%;min-height:46px;text-align:left;justify-content:flex-start;padding:.7rem .8rem}
+ .portada {padding-block:2rem}
+ .pagina{padding-block:1.4rem}
+ .tarjeta{padding:1rem}
+}
+
+
+/* v0.5.8.1 — jerarquía visual de ejemplos del laboratorio */
+.laboratorio-ejemplos .boton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: .3rem;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.35;
+  min-width: min(100%, 155px);
+}
+.laboratorio-ejemplos .laboratorio-ejemplo-tipo {
+  display: block;
+  color: #76e9d8;
+  font-size: .73rem;
+  font-weight: 600;
+  letter-spacing: .035em;
+  line-height: 1.25;
+}
+@media (max-width: 520px) {
+  .laboratorio-ejemplos .boton { min-width: 0; flex: 1 1 140px; }
+}

@@ -1,0 +1,3 @@
+CodePhy v0.5.8.1 — Restauración visual de categorías en Laboratorio Python.
+Reemplazar solo src/App.css. No modifica React, Python ni navegación.
+Probar npm run dev y npm run build antes de publicar.

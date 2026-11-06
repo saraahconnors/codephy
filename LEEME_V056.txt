@@ -1,0 +1,17 @@
+CodePhy v0.5.6 — Archivos CSV y restauración de Copiar código
+
+Reemplaza SOLO estos archivos dentro de C:\Users\saraa\Proyectos\python-fisica:
+  src/components/LaboratorioPython.jsx
+  src/workers/python.worker.js
+
+Cambios:
+- Restaura el botón «Copiar código» en el laboratorio.
+- Descarga el ejemplo mediciones.csv (contenido generado localmente).
+- Carga un CSV de hasta 1 MB en el sistema temporal de archivos de Pyodide.
+- Añade «Análisis de CSV» con código estándar portable a Colab, si se sube el mismo CSV.
+- Detecta hasta 5 archivos CSV generados de hasta 1 MB cada uno y permite descargarlos.
+
+Nota: reiniciar Python elimina los archivos cargados. El entorno solo exporta CSV.
+Verifica con npm run build y luego npm run dev.
+NO hace falta npm install.
+No sobrescribas otros archivos de tu proyecto.

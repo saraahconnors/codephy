@@ -1,0 +1,25 @@
+CodePhy - prueba local de Python con Pyodide
+
+1) Extraer el ZIP dentro de la carpeta raiz python-fisica (reemplazar App.jsx y App.css).
+2) npm run dev
+3) Abrir http://localhost:5173/codephy/#/laboratorio (usar el puerto que indique Vite).
+4) Probar Energia cinetica, Tipos de datos y NumPy. Cambiar valores y ejecutar.
+5) Probar un error de Python: print(variable_que_no_existe)
+6) Probar Detener: while True: pass (detener pronto; el worker se termina).
+7) npm run build
+
+Esta version NO reemplaza los resultados de referencia ni el sistema de Colab.
+Pyodide 0.29.5 se descarga desde jsDelivr en la primera ejecucion; se requiere Internet.
+No se instala ninguna dependencia nueva de npm.
+No hay pruebas automatizadas de navegador en este paquete; verificar local y en GitHub Pages.
+
+Para publicar sin alterar main (recomendado):
+  git switch -c prueba-pyodide
+  git add src/App.jsx src/App.css src/components/LaboratorioPython.jsx src/workers/python.worker.js
+  git commit -m "Prueba de laboratorio Python con Pyodide"
+  git push -u origin prueba-pyodide
+
+ATENCION: GitHub Pages de este repositorio despliega normalmente desde main. Subir solamente
+la rama de prueba no actualizara la pagina publica. Primero validarla localmente y, si se
+aprueba, integrar con main mediante merge y push. Alternativamente se puede probar una
+publicacion temporal separada, configurando su propio workflow.

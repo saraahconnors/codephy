@@ -1,0 +1,28 @@
+CODEPHY v0.5.4 EXPERIMENTAL · Animaciones + graficas interactivas
+
+Contenido del ZIP: SOLO 3 archivos para sobrescribir.
+src/components/LaboratorioPython.jsx
+src/workers/python.worker.js
+src/App.css
+
+PASOS:
+1. Guarda una copia de tu proyecto C:\Users\saraa\Proyectos\python-fisica.
+2. Extrae las carpetas src/ de este ZIP dentro del proyecto, reemplazando los 3 archivos.
+3. Abre terminal VS Code en la carpeta del proyecto y ejecuta: npm run dev
+4. En el Laboratorio, prueba 'Proyectil animado': Ejecutar y luego Reproducir/Pausar.
+5. Prueba 'Onda interactiva': Ejecutar; zoom, desplazamiento y coordenadas.
+6. Prueba 'Caida libre' para comprobar compatibilidad con las figuras anteriores.
+7. Antes de subir: npm run build
+
+No se necesita npm install adicional. Pyodide se carga desde un CDN externo.
+
+NOTAS:
+- Las animaciones usan capture_frame() definido por CodePhy: genera hasta 36 fotogramas
+  mediante Matplotlib, que se reproducen en el navegador cuando la ejecucion acaba.
+- Las curvas SVG se crean usando interactive_plot(x,y,title,xlabel,ylabel), definido
+  por CodePhy. Requiere 2-1500 pares (x,y), con x creciente.
+- La grafica SVG admite zoom, desplazamiento horizontal, consulta de coordenadas
+  y restablecimiento. No es Plotly y no ejecuta interacciones del lado de Python.
+- No se integran lecciones ni se modifican datos de cursos.
+- Animaciones largas pueden tardar y consumir memoria; usa Detener si es necesario.
+- Verifica localmente y en GitHub Pages antes de integrar a lecciones.

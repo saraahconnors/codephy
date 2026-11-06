@@ -1,0 +1,26 @@
+CodePhy v0.5.5 - Código científico portable
+
+Este parche reemplaza las funciones de ejemplo exclusivas de CodePhy:
+- interactive_plot() -> matplotlib.pyplot.plot(), title(), xlabel(), ylabel(), show().
+- capture_frame() -> matplotlib.animation.FuncAnimation().
+
+CodePhy interpreta automáticamente las gráficas simples de Matplotlib
+como curvas interactivas con zoom y consulta de coordenadas. Las demás
+figuras se muestran como imágenes de Matplotlib.
+
+La animación se realiza con FuncAnimation (función estándar de Matplotlib)
+y CodePhy captura hasta 36 fotogramas para reproducirlos internamente.
+En Colab, FuncAnimation se ejecuta, pero para visualizar la animación allí
+normalmente hay que usar `from IPython.display import HTML, display` y
+`display(HTML(ani.to_jshtml()))` en una celda adicional.
+
+INSTALACIÓN:
+1. Respalda C:\Users\saraa\Proyectos\python-fisica
+2. Descomprime en la raíz del proyecto y reemplaza los dos archivos.
+3. npm run dev
+4. Prueba "Decaimiento interactivo", "Onda interactiva", "Proyectil animado" y "Oscilador animado".
+5. npm run build ANTES DE PUBLICAR. Si aparece un error, no publiques.
+
+Este parche no modifica App.jsx, las lecciones ni dependencias npm.
+Límites: 1 curva simple por figura (x creciente, hasta 1500 puntos) para
+visor interactivo; figuras complejas siguen en PNG. Máximo 36 fotogramas.

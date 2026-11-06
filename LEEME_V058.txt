@@ -1,0 +1,12 @@
+CODEPHY v0.5.8 — NAVEGACIÓN Y CONTACTO
+
+Contenido: src/App.jsx y src/App.css.
+Basado en App.jsx/App.css de la prueba Pyodide v0.5.1, donde la ruta de laboratorio ya estaba incorporada.
+IMPORTANTE: esta actualización NO contiene los cambios posteriores del laboratorio. Solo reemplaza App.jsx y App.css; conserva tus archivos src/components/LaboratorioPython.jsx y src/workers/python.worker.js de v0.5.7.
+
+1. Haz una copia de seguridad de src/App.jsx y src/App.css.
+2. Extrae el ZIP sobre la raíz del proyecto y reemplaza solo los dos archivos.
+3. npm run dev; inspecciona móvil y escritorio, enlaces, Contacto y ruta directa #/laboratorio.
+4. npm run build. NO subas a GitHub hasta verificar y aprobar los cambios.
+
+Nota: los botones de lecciones aún podrían conservar referencias a Colab si existen en sus propios componentes; este paquete no los elimina ni cambia contenidos.

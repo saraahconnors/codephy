@@ -1,0 +1,36 @@
+CODEPHY RETRO v0.5.0 — PRUEBA LOCAL
+====================================
+Esta actualización se aplica ENCIMA de la versión 0.4. No reemplaces src ni public completas: extrae el ZIP en la RAÍZ de python-fisica y acepta combinar carpetas/reemplazar los archivos incluidos.
+
+NUEVO MODELO:
+- src/data/lecciones/python/01-variables.js contiene los datos de la primera lección. Cada sección tiene bloques con tipo: texto, ecuacion, nota, tabla, lista, pasos, pregunta o ejemplo.
+- src/data/lecciones/index.js registra las lecciones en orden.
+- src/components/LessonPage.jsx presenta cualquier lección registrada sin escribir JSX específico para cada una.
+- src/components/EjemploCodigo.jsx muestra CodeBlock + ResultadoCodigo.
+- src/components/ResultadoCodigo.jsx muestra el resultado solo al pulsar «Mostrar resultado».
+- src/data/ejemplos.js conserva la galería y ahora utiliza objetos resultado en lugar de cadenas.
+- public/resultados/ guarda las salidas reales exportadas de Colab.
+
+PARA VINCULAR COLAB:
+En cada bloque de tipo ejemplo, asigna colabUrl: "https://colab.research.google.com/...".
+Si colabUrl está vacío, no aparece el botón. Asegúrate de que el notebook sea accesible al estudiante.
+
+TIPOS DE RESULTADO:
+resultado: { tipo: "texto", contenido: "9.0" }
+resultado: { tipo: "tabla", columnas: ["t (s)", "x (m)"], filas: [[0, 2], [1, 5]] }
+resultado: { tipo: "imagen", archivo: "matplotlib/movimiento.png", descripcion: "Gráfica generada en Colab" }
+resultado: { tipo: "video", archivo: "simulaciones/pendulo.mp4", poster: "simulaciones/pendulo.png", descripcion: "Péndulo simple" }
+resultado: { tipo: "mixto", elementos: [ { tipo: "texto", contenido: "..." }, { tipo: "imagen", archivo: "..." } ] }
+
+IMPORTANTE: La ruta archivo es relativa a public/resultados/. No escribas /codephy/ ni public/ al inicio. Para GIFs cortos usa tipo imagen, para MP4/WebM usa tipo video. Exporta los resultados desde el MISMO código y parámetros descritos en la lección. Los ejemplos actuales de texto y tabla son datos de referencia calculables, aún sin notebook enlazado.
+
+PRUEBA:
+1) npm install (solo si faltan dependencias de la v0.4)
+2) npm run dev
+3) Abrir /codephy/#/leccion/python-variables
+4) Copiar código, revelar/ocultar cada resultado, responder predicción.
+5) Abrir /codephy/#/galeria, entrar a «Movimiento rectilíneo uniforme», revelar tabla.
+6) npm run build
+No hace falta hacer push todavía.
+
+NOTA: No se agregó ejecución de Python en el navegador ni resultados de gráfica inventados.

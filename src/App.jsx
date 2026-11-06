@@ -24,10 +24,10 @@ const categoriasMatematicas = [
 
 const paginas = [
   { ruta: "/", nombre: "Inicio" },
-  { ruta: "/aprender", nombre: "Aprender programación" },
-  { ruta: "/galeria", nombre: "Galería de código" },
-  { ruta: "/areas", nombre: "Áreas de física" },
-  { ruta: "/laboratorio", nombre: "Laboratorio Python" },
+  { ruta: "/aprender", nombre: "Lecciones" },
+  { ruta: "/galeria", nombre: "Galería" },
+  { ruta: "/areas", nombre: "Física" },
+  { ruta: "/contacto", nombre: "Contacto" },
 ];
 
 function leerRuta() {
@@ -44,6 +44,7 @@ function iconoDeRuta(ruta, ejemplo) {
   if (ruta === "/aprender" || ruta.startsWith("/leccion/")) return "terminal";
   if (ruta === "/galeria") return "folder";
   if (ruta === "/laboratorio") return "terminal";
+  if (ruta === "/contacto") return "folder";
   if (ruta === "/areas") return "atom";
   if (ejemplo) {
     const porArea = {
@@ -64,6 +65,7 @@ function iconoDeRuta(ruta, ejemplo) {
 
 function App() {
   const [ruta, setRuta] = useState(leerRuta);
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const ejemploActual = ejemplos.find(
     (ejemplo) => ruta === `/ejemplo/${ejemplo.id}`,
@@ -82,6 +84,7 @@ function App() {
   useEffect(() => {
     function actualizarRuta() {
       setRuta(leerRuta());
+      setMenuAbierto(false);
     }
 
     window.addEventListener("hashchange", actualizarRuta);
@@ -124,25 +127,28 @@ function App() {
       </a>
 
       <header className="cabecera">
-        <a className="marca" href="#/" aria-label="CodePhy: inicio">
-          <PixelIcon name="terminal" size={36} />
-          CodePhy<span className="marca-exe">.exe</span>
-          <span className="cursor-marca" aria-hidden="true">
-            _
-          </span>
-        </a>
-
-        <p className="descripcion-marca">
-          Programación científica con Python para física
-        </p>
-
-        <nav className="navegacion" aria-label="Navegación principal">
+        <div className="cabecera-superior">
+          <a className="marca" href="#/" aria-label="CodePhy: inicio" onClick={() => setMenuAbierto(false)}>
+            <PixelIcon name="terminal" size={32} />
+            <span>CodePhy<span className="marca-exe">.exe</span><span className="cursor-marca" aria-hidden="true">_</span></span>
+          </a>
+          <button
+            className="boton-menu"
+            type="button"
+            aria-expanded={menuAbierto}
+            aria-controls="menu-codephy"
+            aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+            onClick={() => setMenuAbierto((abierto) => !abierto)}
+          >
+            <span aria-hidden="true">{menuAbierto ? "✕" : "☰"}</span>
+            <span>{menuAbierto ? "Cerrar" : "Menú"}</span>
+          </button>
+        </div>
+        <nav id="menu-codephy" className={`navegacion ${menuAbierto ? "navegacion-abierta" : ""}`} aria-label="Navegación principal">
           {paginas.map((pagina) => (
-            <a
-              key={pagina.ruta}
-              href={`#${pagina.ruta}`}
+            <a key={pagina.ruta} href={`#${pagina.ruta}`}
               aria-current={ruta === pagina.ruta ? "page" : undefined}
-            >
+              onClick={() => setMenuAbierto(false)}>
               {pagina.nombre}
             </a>
           ))}
@@ -153,7 +159,7 @@ function App() {
         {ruta === "/" && (
           <>
             <section className="portada">
-              <p className="etiqueta">▸ INICIAR SISTEMA / CODEPHY v0.5.0</p>
+              <p className="etiqueta">▸ APRENDE · PROGRAMA · EXPLORA</p>
               <h1><span className="titulo-amarillo">CodePhy</span><br />Programación en Python para Física<span className="cursor-marca">_</span></h1>
               <p className="introduccion">
                 Comprende el código, modifica sus parámetros e interpreta sus
@@ -161,9 +167,7 @@ function App() {
                 herramientas para tus tareas y prácticas.
               </p>
               <div className="acciones-portada"><a className="boton boton-principal" href="#/aprender">▶ Iniciar curso</a><a className="boton" href="#/galeria">Explorar galería →</a></div>
-              <p className="aviso">
-                Consulta lecciones y ejemplos, o prueba programas cortos en el Laboratorio Python.
-              </p>
+
             </section>
 
             <section className="seccion">
@@ -198,8 +202,8 @@ function App() {
         {ruta === "/aprender" && (
           <section className="pagina">
             <p className="etiqueta">RUTA PROGRESIVA</p>
-            <h1>Aprender programación</h1>
-            <p>Organización inicial de los módulos, todavía ajustable.</p>
+            <h1>Aprende a programar</h1>
+            <p>Avanza desde los fundamentos de Python hasta sus aplicaciones científicas.</p>
 
             <ol className="lista-modulos">
               {modulos.map((modulo, indice) => {
@@ -245,10 +249,7 @@ function App() {
           <section className="pagina">
             <p className="etiqueta">CONSULTA POR TAREA</p>
             <h1>Galería de código</h1>
-            <p className="aviso">
-              Ejemplos demostrativos para probar las funciones. No constituyen
-              el contenido didáctico definitivo.
-            </p>
+
 
             <div className="recorridos">
               {ejemplos.map((ejemplo) => (
@@ -330,6 +331,21 @@ function App() {
           </section>
         )}
 
+        {ruta === "/contacto" && (
+          <section className="pagina contacto-pagina">
+            <p className="etiqueta">COMUNIDAD CODEPHY</p>
+            <h1>Contacto y colaboraciones</h1>
+            <p>CodePhy es una plataforma educativa de acceso libre para aprender programación científica aplicada a la física.</p>
+            <div className="tarjeta contacto-tarjeta">
+              <h2>Participa en el proyecto</h2>
+              <p>¿Encontraste un error, quieres proponer un ejemplo o te interesa aportar conocimientos, materiales o apoyar voluntariamente el proyecto? Escríbenos para conversar sobre tu propuesta.</p>
+              <p><strong>Correo:</strong> <a href="mailto:codephy.lab@gmail.com">codephy.lab@gmail.com</a></p>
+              <a className="boton boton-principal" href="mailto:codephy.lab@gmail.com?subject=Contacto%20CodePhy">Escribir un correo</a>
+              <p className="estado">El botón abre tu aplicación de correo configurada. No se solicitan pagos ni se reciben donaciones directamente desde la página.</p>
+            </div>
+          </section>
+        )}
+
         {ruta === "/laboratorio" && <LaboratorioPython />}
 
         {esLeccion && <LessonPage key={leccionActual.id} leccion={leccionActual} />}
@@ -365,8 +381,8 @@ function App() {
         <div className="pie-contenido">
           <p className="etiqueta">CONTACTO Y APORTACIONES</p>
           <h2>Ayuda a mejorar CodePhy</h2>
-          <p>Podrás comunicar errores, sugerir mejoras y proponer ejemplos.</p>
-          <p className="estado">Canal de contacto pendiente de habilitar.</p>
+          <p>Puedes comunicar errores, sugerir mejoras y proponer ejemplos.</p>
+          <p><a href="mailto:codephy.lab@gmail.com">codephy.lab@gmail.com</a> · <a href="#/contacto">Contacto y colaboraciones</a></p>
           <p className="firma">CodePhy · Plataforma educativa en desarrollo.</p>
         </div>
       </footer>
