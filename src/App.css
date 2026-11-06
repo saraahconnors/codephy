@@ -177,3 +177,6 @@
 .terminal-fila input:focus { outline:2px solid #e6c87f; }
 .boton-cancelar { margin-top:.8rem; }
 @media(max-width:640px) { .unidad-cabecera { min-height:0; } .unidad-leccion { min-height:0; } .terminal-fila button { width:100%; } }
+
+/* Icono de hojas superpuestas: tamaño consistente con los botones retro. */
+.icono-copiar { display:inline-block; width:1.25em; height:1.25em; vertical-align:-.21em; margin-right:.3em; stroke:currentColor; stroke-width:2.15; stroke-linejoin:miter; stroke-linecap:square; flex-shrink:0; }

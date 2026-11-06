@@ -41,7 +41,10 @@ function enlaceEjemplo(id) {
 // El icono de pestaña representa la sección actual y usa los SVG ya incluidos.
 function iconoDeRuta(ruta, ejemplo) {
   if (ruta === "/") return "atom";
-  if (ruta === "/aprender" || ruta.startsWith("/leccion/") || ruta.startsWith("/unidad/")) return "python-intro";
+  if (ruta === "/aprender") return "python-intro";
+  if (ruta === "/unidad/unidad-3" || ruta.startsWith("/leccion/python-11-") || ruta.startsWith("/leccion/python-12-") || ruta.startsWith("/leccion/python-13-") || ruta.startsWith("/leccion/python-14-") || ruta.startsWith("/leccion/python-15-")) return "python-loops";
+  if (ruta === "/unidad/unidad-2" || ruta.startsWith("/leccion/python-06-") || ruta.startsWith("/leccion/python-07-") || ruta.startsWith("/leccion/python-08-") || ruta.startsWith("/leccion/python-09-") || ruta.startsWith("/leccion/python-10-")) return "python-logic";
+  if (ruta.startsWith("/leccion/") || ruta.startsWith("/unidad/")) return "python-intro";
   if (ruta === "/galeria") return "folder";
   if (ruta === "/laboratorio") return "terminal";
   if (ruta === "/contacto") return "folder";
@@ -224,10 +227,24 @@ function App() {
                 <p className="unidad-conteo">5 lecciones · Python básico · Sin requisitos previos</p>
                 <a className="boton boton-principal" href="#/unidad/unidad-1">Explorar unidad →</a></div>
             </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-logic" size={84}/>
+              <div><p className="etiqueta">UNIDAD 02</p><h2>Condicionales y lógica</h2>
+                <p>Comparaciones, operadores lógicos, if, elif, else y validación de parámetros físicos.</p>
+                <p className="unidad-conteo">5 lecciones · Python básico · Requiere Unidad 1</p>
+                <a className="boton boton-principal" href="#/unidad/unidad-2">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-loops" size={84}/>
+              <div><p className="etiqueta">UNIDAD 03</p><h2>Ciclos y automatización</h2>
+                <p>for, while, range(), acumuladores, control de ciclos y automatización de cálculos físicos.</p>
+                <p className="unidad-conteo">5 lecciones · Python básico · Requiere Unidades 1 y 2</p>
+                <a className="boton boton-principal" href="#/unidad/unidad-3">Explorar unidad →</a></div>
+            </div>
             <h2 className="subtitulo-areas">▸ Recorrido del curso</h2>
             <div className="temario-resumen">
-              {['Condicionales y lógica','Ciclos y automatización','Estructuras y funciones','Computación con NumPy','Visualización con Matplotlib','Archivos y datos experimentales','Estadística y ajuste','Álgebra lineal y SymPy','Métodos numéricos','Ecuaciones diferenciales','Simulaciones y proyectos'].map((nombre, i) =>
-                <div className="temario-resumen-item" key={nombre}><span>{String(i+2).padStart(2,'0')}</span>{nombre}</div>)}
+              {['Estructuras y funciones','Computación con NumPy','Visualización con Matplotlib','Archivos y datos experimentales','Estadística y ajuste','Álgebra lineal y SymPy','Métodos numéricos','Ecuaciones diferenciales','Simulaciones y proyectos'].map((nombre, i) =>
+                <div className="temario-resumen-item" key={nombre}><span>{String(i+4).padStart(2,'0')}</span>{nombre}</div>)}
             </div>
           </section>
         )}

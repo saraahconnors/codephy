@@ -1,7 +1,7 @@
 // Íconos pixel art originales de CodePhy, en SVG dentro de public/icons/.
 // BASE_URL permite que funcionen tanto en local como en GitHub Pages (/codephy/).
 const etiquetas = {
-  "python-intro": "Introducción a Python", terminal: "Terminal", folder: "Carpeta", atom: "Átomo", graph: "Gráfica", flask: "Simulación",
+  "python-intro": "Introducción a Python", "python-logic": "Condicionales y lógica", "python-loops": "Ciclos y automatización", terminal: "Terminal", folder: "Carpeta", atom: "Átomo", graph: "Gráfica", flask: "Simulación",
   mechanics: "Mecánica clásica", thermowaves: "Calor, ondas y fluidos",
   optics: "Óptica", quantum: "Fenomenología cuántica y relativista",
   electromagnetism: "Electromagnetismo", vector: "Análisis vectorial",

@@ -93,7 +93,7 @@ export default function EjemploEjecutable({ ejemplo, prediccion }) {
       placeholder={esReto?'Escribe tu código aquí…':undefined}/>
     {prediccion && !esReto && <PreguntaPrevia bloque={prediccion} onComprobar={()=>setPrediccionComprobada(true)}/>}
     <div className="ejemplo-acciones">
-      <button className="boton" type="button" disabled={!codigo.trim()} onClick={copiar}><span aria-hidden="true">⧉</span> {copiado?'Código copiado':'Copiar código'}</button>
+      <button className="boton" type="button" disabled={!codigo.trim()} onClick={copiar}><svg className="icono-copiar" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M8 3H17V6H20V20H8V3Z"/><path d="M4 7H6V22H17"/><path d="M17 3V6H20"/></svg> {copiado?'Código copiado':'Copiar código'}</button>
       <button className="boton boton-principal" type="button" disabled={!codigo.trim() || ejecutando || entorno.busy || Boolean(consola) || (prediccion && !prediccionComprobada)} onClick={empezar}>▶ Ejecutar</button>
       {ejecutando && <button type="button" className="boton" onClick={detenerPythonLecciones}>■ Detener</button>}
       <span className="ejemplo-estado" role="status">{ejecutando?'Ejecutando…':entorno.status}</span>
