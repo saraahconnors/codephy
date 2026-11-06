@@ -1,4 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap');
-:root{font-family:'Pixelify Sans',Consolas,monospace;color:#f5eeff;background:#100b20;color-scheme:dark;font-synthesis:none;--panel:#1a1230;--texto-secundario:#c7b7dc;--borde:#695091;--azul:#56dde8;--verde:#57e3c1;--amarillo:#f7d366;--rojo:#f78ccc}
+/* Numerales Silkscreen dentro del texto Pixelify Sans.
+   Solo se sustituyen los dígitos 0-9; los demás caracteres siguen en Pixelify Sans.
+   La tipografía monoespaciada del código se conserva sin cambios. */
+@font-face {
+  font-family: 'CodePhy Digitos';
+  src: url('https://fonts.gstatic.com/s/silkscreen/v6/m8JXjfVPf62XiF7kO-i9YLNlaw.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+:root{font-family:'CodePhy Digitos','Pixelify Sans',Consolas,monospace;color:#f5eeff;background:#100b20;color-scheme:dark;font-synthesis:none;--panel:#1a1230;--texto-secundario:#c7b7dc;--borde:#695091;--azul:#56dde8;--verde:#57e3c1;--amarillo:#f7d366;--rojo:#f78ccc}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;line-height:1.55;background-color:#100b20;background-image:linear-gradient(#8c5abb13 1px,transparent 1px),linear-gradient(90deg,#8c5abb13 1px,transparent 1px),radial-gradient(circle at 50% 0%,#412260a1,transparent 58%);background-size:30px 30px,30px 30px,100% 750px;background-repeat:repeat,repeat,no-repeat}
 a{color:var(--azul);text-underline-offset:.2em}a:focus-visible,button:focus-visible{outline:3px solid var(--amarillo);outline-offset:4px}h1,h2,h3{line-height:1.25;overflow-wrap:anywhere}h1{font-size:clamp(2rem,4.6vw,3.9rem);margin:1rem 0 1.5rem}h2{font-size:clamp(1.2rem,2.5vw,1.7rem);margin:2rem 0 1rem}h3{font-size:1.25rem;margin:0 0 .8rem}p{margin:0 0 1rem}button{font:inherit}pre,code,samp{font-family:Consolas,'Courier New',monospace}pre{max-width:100%;overflow-x:auto;padding:1.2rem;border:1px solid var(--borde);background:#0d0b1a;font-size:.9rem;line-height:1.7}::selection{color:#100b20;background:var(--amarillo)}

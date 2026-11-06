@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import EjemploCodigo from "./components/EjemploCodigo.jsx";
 import LessonPage from "./components/LessonPage.jsx";
 import LaboratorioPython from "./components/LaboratorioPython.jsx";
 import PixelIcon from "./components/PixelIcon.jsx";
-import { ejemplos, modulos } from "./data/ejemplos.js";
-import { lecciones, buscarLeccion } from "./data/lecciones/index.js";
+import { ejemplos } from "./data/ejemplos.js";
+import { buscarLeccion, buscarUnidad } from "./data/lecciones/index.js";
 import "./App.css";
 
 // Categorías visibles aunque todavía no existan lecciones para ellas.
@@ -24,7 +24,7 @@ const categoriasMatematicas = [
 
 const paginas = [
   { ruta: "/", nombre: "Inicio" },
-  { ruta: "/aprender", nombre: "Lecciones" },
+  { ruta: "/aprender", nombre: "Aprende" },
   { ruta: "/galeria", nombre: "Galería" },
   { ruta: "/areas", nombre: "Física" },
   { ruta: "/contacto", nombre: "Contacto" },
@@ -41,7 +41,7 @@ function enlaceEjemplo(id) {
 // El icono de pestaña representa la sección actual y usa los SVG ya incluidos.
 function iconoDeRuta(ruta, ejemplo) {
   if (ruta === "/") return "atom";
-  if (ruta === "/aprender" || ruta.startsWith("/leccion/")) return "terminal";
+  if (ruta === "/aprender" || ruta.startsWith("/leccion/") || ruta.startsWith("/unidad/")) return "python-intro";
   if (ruta === "/galeria") return "folder";
   if (ruta === "/laboratorio") return "terminal";
   if (ruta === "/contacto") return "folder";
@@ -79,7 +79,22 @@ function App() {
     .filter((area) => !areasCatalogadas.has(area));
   const leccionActual = ruta.startsWith("/leccion/") ? buscarLeccion(ruta.slice("/leccion/".length)) : null;
   const esLeccion = Boolean(leccionActual);
-  const rutaValida = Boolean(paginaActual || ejemploActual || esLeccion);
+  const unidadActual = ruta.startsWith("/unidad/") ? buscarUnidad(ruta.slice("/unidad/".length)) : null;
+  const rutaValida = Boolean(paginaActual || ejemploActual || esLeccion || unidadActual || ruta === "/laboratorio");
+
+  useEffect(() => {
+    // La navegación entre vistas no debe recuperar la posición de la página anterior.
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    return () => { window.history.scrollRestoration = previous; };
+  }, []);
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.getElementById('contenido')?.focus({ preventScroll: true });
+    const frame = requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+    return () => cancelAnimationFrame(frame);
+  }, [ruta]);
 
   useEffect(() => {
     function actualizarRuta() {
@@ -96,7 +111,7 @@ function App() {
 
   useEffect(() => {
     const titulo =
-      (esLeccion ? leccionActual.titulo : ejemploActual?.titulo ?? paginaActual?.nombre) ?? "Página no encontrada";
+      (esLeccion ? leccionActual.titulo : unidadActual?.titulo ?? ejemploActual?.titulo ?? paginaActual?.nombre) ?? "Página no encontrada";
 
     document.title = `${titulo} | CodePhy`;
     const icono = iconoDeRuta(ruta, ejemploActual);
@@ -109,9 +124,8 @@ function App() {
     }
     favicon.type = "image/svg+xml";
     favicon.href = iconUrl;
-    window.scrollTo(0, 0);
-    document.getElementById("contenido")?.focus();
-  }, [ruta, ejemploActual, paginaActual, esLeccion, leccionActual]);
+
+  }, [ruta, ejemploActual, paginaActual, esLeccion, leccionActual, unidadActual]);
 
   return (
     <>
@@ -201,49 +215,38 @@ function App() {
 
         {ruta === "/aprender" && (
           <section className="pagina">
-            <p className="etiqueta">RUTA PROGRESIVA</p>
-            <h1>Aprende a programar</h1>
-            <p>Avanza desde los fundamentos de Python hasta sus aplicaciones científicas.</p>
-
-            <ol className="lista-modulos">
-              {modulos.map((modulo, indice) => {
-                const recursos = ejemplos.filter(
-                  (ejemplo) => ejemplo.modulo === modulo,
-                );
-
-                return (
-                  <li className="tarjeta modulo" key={modulo}>
-                    <PixelIcon name={indice===0 ? "terminal" : indice===1 ? "folder" : indice===2 ? "graph" : indice===3 ? "numeric" : "flask"} size={48}/><span className="numero-modulo" aria-hidden="true">
-                      {String(indice + 1).padStart(2, "0")}
-                    </span>
-
-                    <div>
-                      <h2 className="titulo-tarjeta">{modulo}</h2>
-
-                      {lecciones.filter(l => l.modulo === modulo).map(l => <div className="leccion-destacada" key={l.id}><span className="etiqueta">LECCIÓN · {l.nivel.toUpperCase()}</span><a href={`#/leccion/${l.id}`}>{l.numero} · {l.titulo} →</a><p>{l.subtitulo}</p></div>)}
-
-                      {recursos.length > 0 ? (
-                        <ul className="lista-recursos">
-                          {recursos.map((ejemplo) => (
-                            <li key={ejemplo.id}>
-                              <a href={enlaceEjemplo(ejemplo.id)}>
-                                {ejemplo.titulo}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="estado">
-                          Contenido pendiente de desarrollar.
-                        </p>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+            <p className="etiqueta">APRENDE PYTHON PARA FÍSICA</p>
+            <h1>Ruta de aprendizaje</h1>
+            <p>Aprende a programar desde los fundamentos y aplica cada concepto a problemas científicos. Avanza a tu ritmo y experimenta con código ejecutable.</p>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-intro" size={84}/>
+              <div><p className="etiqueta">UNIDAD 01</p><h2>Introducción a Python</h2><p>Instrucciones, variables, operaciones, conversiones, entrada de datos y depuración.</p>
+                <p className="unidad-conteo">5 lecciones · Python básico · Sin requisitos previos</p>
+                <a className="boton boton-principal" href="#/unidad/unidad-1">Explorar unidad →</a></div>
+            </div>
+            <h2 className="subtitulo-areas">▸ Recorrido del curso</h2>
+            <div className="temario-resumen">
+              {['Condicionales y lógica','Ciclos y automatización','Estructuras y funciones','Computación con NumPy','Visualización con Matplotlib','Archivos y datos experimentales','Estadística y ajuste','Álgebra lineal y SymPy','Métodos numéricos','Ecuaciones diferenciales','Simulaciones y proyectos'].map((nombre, i) =>
+                <div className="temario-resumen-item" key={nombre}><span>{String(i+2).padStart(2,'0')}</span>{nombre}</div>)}
+            </div>
           </section>
         )}
+
+        {unidadActual && <section className="pagina unidad-pagina">
+          <a href="#/aprender">← Ruta de aprendizaje</a>
+          <div className="unidad-cabecera">
+            <PixelIcon name={unidadActual.icono} size={104}/>
+            <div><p className="etiqueta">UNIDAD {String(unidadActual.numero).padStart(2,'0')}</p><h1>{unidadActual.titulo}</h1><p>{unidadActual.descripcion}</p></div>
+          </div>
+          <div className="unidad-panel"><h2>Qué aprenderás</h2><ul>{unidadActual.objetivos.map(obj => <li key={obj}>{obj}</li>)}</ul><p><strong>Conocimientos previos:</strong> {unidadActual.conocimientosPrevios}</p></div>
+          <h2>Lecciones de la unidad</h2>
+          <ol className="unidad-lista">
+            {unidadActual.lecciones.map(id => {const item = buscarLeccion(id); return item && <li key={id} className="tarjeta unidad-leccion">
+              <span className="unidad-numero">{item.numero}</span><div><h3>{item.titulo}</h3><p>{item.subtitulo}</p><p className="unidad-ejemplo">Aplicación: {item.ejemploPrincipal}</p><a href={`#/leccion/${item.id}`} className="boton">Abrir lección →</a></div>
+            </li>;})}
+          </ol>
+          <a className="boton boton-principal" href={`#/leccion/${unidadActual.lecciones[0]}`}>▶ Comenzar la unidad</a>
+        </section>}
 
         {ruta === "/galeria" && (
           <section className="pagina">
@@ -383,7 +386,7 @@ function App() {
           <h2>Ayuda a mejorar CodePhy</h2>
           <p>Puedes comunicar errores, sugerir mejoras y proponer ejemplos.</p>
           <p><a href="mailto:codephy.lab@gmail.com">codephy.lab@gmail.com</a> · <a href="#/contacto">Contacto y colaboraciones</a></p>
-          <p className="firma">CodePhy · Plataforma educativa en desarrollo.</p>
+          <p className="firma">CodePhy · Programación científica de acceso libre.</p>
         </div>
       </footer>
     </>

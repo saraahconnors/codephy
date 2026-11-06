@@ -38,7 +38,7 @@ function safeCsvName(name) {
   if (!clean.toLowerCase().endsWith('.csv') || clean === '.' || clean === '..' || clean.length > 100) throw new Error('Nombre CSV no válido.');
   return clean;
 }
-async function handle({ type, code = '', id, name, bytes, required }) {
+async function handle({ type, code = '', id, name, bytes, required, inputs = [] }) {
   if (type === 'upload') {
     try {
       const filename = safeCsvName(name);
@@ -79,6 +79,7 @@ async function handle({ type, code = '', id, name, bytes, required }) {
     const { python, needsMatplotlib } = await prepare(String(code));
     status('Ejecutando código…');
     python.globals.set('_codephy_source', String(code));
+    python.globals.set('_codephy_inputs_json', JSON.stringify(Array.isArray(inputs) ? inputs.map(String) : []));
     python.globals.set('_codephy_uploaded', Array.from(uploaded));
     python.globals.set('_codephy_plot_enabled', needsMatplotlib);
     const raw = await python.runPythonAsync(`
@@ -131,7 +132,14 @@ try:
             import matplotlib.pyplot as _cp_plt
             _cp_plt.close('all')
             _cp_plt.show = lambda *args, **kwargs: None
-        _scope = {'__name__': '__main__'}
+        _cp_input_values = iter(json.loads(_codephy_inputs_json))
+        def _cp_input(prompt=''):
+            print(str(prompt), end='')
+            try:
+                return next(_cp_input_values)
+            except StopIteration:
+                raise EOFError('Falta un valor de entrada. Completa los campos antes de ejecutar.')
+        _scope = {'__name__': '__main__', 'input': _cp_input}
         try:
             exec(compile(_codephy_source, '<CodePhy>', 'exec'), _scope)
         except BaseException:
