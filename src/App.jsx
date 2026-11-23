@@ -1,10 +1,11 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import EjemploCodigo from "./components/EjemploCodigo.jsx";
+import EjemploEjecutable from "./components/EjemploEjecutable.jsx";
 import LessonPage from "./components/LessonPage.jsx";
 import LaboratorioPython from "./components/LaboratorioPython.jsx";
 import PixelIcon from "./components/PixelIcon.jsx";
-import { ejemplos } from "./data/ejemplos.js";
-import { buscarLeccion, buscarUnidad } from "./data/lecciones/index.js";
+import { ejemplosGaleria as ejemplos } from "./data/galeria.js";
+import { unidades, buscarLeccion, buscarUnidad } from "./data/lecciones/index.js";
 import "./App.css";
 
 // Categorías visibles aunque todavía no existan lecciones para ellas.
@@ -42,6 +43,15 @@ function enlaceEjemplo(id) {
 function iconoDeRuta(ruta, ejemplo) {
   if (ruta === "/") return "atom";
   if (ruta === "/aprender") return "python-intro";
+  if (ruta === "/unidad/unidad-10" || /^\/leccion\/python-(4[6-9]|50)-/.test(ruta)) return "python-numerical";
+  if (ruta === "/unidad/unidad-11" || /^\/leccion\/python-5[1-5]-/.test(ruta)) return "python-odes";
+  if (ruta === "/unidad/unidad-12" || /^\/leccion\/python-(5[6-9]|60)-/.test(ruta)) return "python-simulation";
+  if (ruta === "/unidad/unidad-7" || ruta === "/leccion/python-31-archivos-y-rutas-de-trabajo" || ruta === "/leccion/python-32-leer-y-escribir-archivos-csv" || ruta === "/leccion/python-33-introduccion-a-pandas" || ruta === "/leccion/python-34-limpieza-y-seleccion-de-datos" || ruta === "/leccion/python-35-proyecto-datos-de-laboratorio") return "python-files";
+  if (ruta === "/unidad/unidad-8" || ruta === "/leccion/python-36-medidas-de-tendencia-central" || ruta === "/leccion/python-37-dispersion-y-distribuciones" || ruta === "/leccion/python-38-incertidumbre-y-propagacion" || ruta === "/leccion/python-39-regresion-y-ajuste-de-curvas" || ruta === "/leccion/python-40-residuos-y-calidad-del-ajuste") return "python-stats";
+  if (ruta === "/unidad/unidad-9" || ruta === "/leccion/python-41-vectores-y-productos" || ruta === "/leccion/python-42-matrices-y-sistemas-lineales" || ruta === "/leccion/python-43-autovalores-y-modos-normales" || ruta === "/leccion/python-44-primeros-pasos-con-sympy" || ruta === "/leccion/python-45-derivadas-e-integrales-simbolicas") return "python-linear";
+  if (ruta === "/unidad/unidad-6" || ruta.startsWith("/leccion/python-26-") || ruta.startsWith("/leccion/python-27-") || ruta.startsWith("/leccion/python-28-") || ruta.startsWith("/leccion/python-29-") || ruta.startsWith("/leccion/python-30-")) return "python-plot";
+  if (ruta === "/unidad/unidad-5" || ruta.startsWith("/leccion/python-21-") || ruta.startsWith("/leccion/python-22-") || ruta.startsWith("/leccion/python-23-") || ruta.startsWith("/leccion/python-24-") || ruta.startsWith("/leccion/python-25-")) return "python-numpy";
+  if (ruta === "/unidad/unidad-4" || ruta.startsWith("/leccion/python-16-") || ruta.startsWith("/leccion/python-17-") || ruta.startsWith("/leccion/python-18-") || ruta.startsWith("/leccion/python-19-") || ruta.startsWith("/leccion/python-20-")) return "python-functions";
   if (ruta === "/unidad/unidad-3" || ruta.startsWith("/leccion/python-11-") || ruta.startsWith("/leccion/python-12-") || ruta.startsWith("/leccion/python-13-") || ruta.startsWith("/leccion/python-14-") || ruta.startsWith("/leccion/python-15-")) return "python-loops";
   if (ruta === "/unidad/unidad-2" || ruta.startsWith("/leccion/python-06-") || ruta.startsWith("/leccion/python-07-") || ruta.startsWith("/leccion/python-08-") || ruta.startsWith("/leccion/python-09-") || ruta.startsWith("/leccion/python-10-")) return "python-logic";
   if (ruta.startsWith("/leccion/") || ruta.startsWith("/unidad/")) return "python-intro";
@@ -69,6 +79,14 @@ function iconoDeRuta(ruta, ejemplo) {
 function App() {
   const [ruta, setRuta] = useState(leerRuta);
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [submenuAbierto, setSubmenuAbierto] = useState(null);
+  const [busquedaGaleria, setBusquedaGaleria] = useState("");
+  const [areaGaleria, setAreaGaleria] = useState("Todas");
+  const areasGaleria = [...new Set(ejemplos.map(ejemplo => ejemplo.area))].sort((a,b) => a.localeCompare(b, "es"));
+  const resultadosGaleria = ejemplos.filter(ejemplo => {
+    const texto = [ejemplo.titulo, ejemplo.descripcion, ejemplo.area, ejemplo.tarea, ejemplo.modulo, ...(ejemplo.palabrasClave || [])].join(" ").toLocaleLowerCase("es");
+    return (areaGaleria === "Todas" || ejemplo.area === areaGaleria) && texto.includes(busquedaGaleria.trim().toLocaleLowerCase("es"));
+  });
 
   const ejemploActual = ejemplos.find(
     (ejemplo) => ruta === `/ejemplo/${ejemplo.id}`,
@@ -103,6 +121,7 @@ function App() {
     function actualizarRuta() {
       setRuta(leerRuta());
       setMenuAbierto(false);
+      setSubmenuAbierto(null);
     }
 
     window.addEventListener("hashchange", actualizarRuta);
@@ -162,13 +181,27 @@ function App() {
           </button>
         </div>
         <nav id="menu-codephy" className={`navegacion ${menuAbierto ? "navegacion-abierta" : ""}`} aria-label="Navegación principal">
-          {paginas.map((pagina) => (
-            <a key={pagina.ruta} href={`#${pagina.ruta}`}
-              aria-current={ruta === pagina.ruta ? "page" : undefined}
-              onClick={() => setMenuAbierto(false)}>
-              {pagina.nombre}
-            </a>
-          ))}
+          {paginas.map((pagina) => {
+            const esAprende = pagina.ruta === "/aprender";
+            const esFisica = pagina.ruta === "/areas";
+            const subitems = esAprende
+              ? unidades.map((unidad) => ({ ruta: `/unidad/${unidad.id}`, nombre: `${unidad.numero}. ${unidad.titulo}` }))
+              : esFisica
+                ? [...categoriasFisica, ...categoriasMatematicas].map((area) => ({ ruta: `/areas`, nombre: area.nombre }))
+                : [];
+            const tieneSubmenu = subitems.length > 0;
+            return <div key={pagina.ruta} className={`navegacion-grupo ${submenuAbierto === pagina.ruta ? 'submenu-abierto' : ''}`}>
+              <a href={`#${pagina.ruta}`} aria-current={ruta === pagina.ruta ? "page" : undefined}
+                onClick={() => { setMenuAbierto(false); setSubmenuAbierto(null); }}>{pagina.nombre}</a>
+              {tieneSubmenu && <button className="submenu-toggle" type="button"
+                aria-label={`Mostrar opciones de ${pagina.nombre}`} aria-expanded={submenuAbierto === pagina.ruta}
+                onClick={() => setSubmenuAbierto(v => v === pagina.ruta ? null : pagina.ruta)}>▾</button>}
+              {tieneSubmenu && <div className="submenu-panel" aria-label={`Opciones de ${pagina.nombre}`}>
+                {subitems.map((item, i) => <a key={`${item.ruta}-${i}`} href={`#${item.ruta}`}
+                  onClick={() => { setMenuAbierto(false); setSubmenuAbierto(null); }}>{item.nombre}</a>)}
+              </div>}
+            </div>;
+          })}
         </nav>
       </header>
 
@@ -241,10 +274,50 @@ function App() {
                 <p className="unidad-conteo">5 lecciones · Python básico · Requiere Unidades 1 y 2</p>
                 <a className="boton boton-principal" href="#/unidad/unidad-3">Explorar unidad →</a></div>
             </div>
-            <h2 className="subtitulo-areas">▸ Recorrido del curso</h2>
-            <div className="temario-resumen">
-              {['Estructuras y funciones','Computación con NumPy','Visualización con Matplotlib','Archivos y datos experimentales','Estadística y ajuste','Álgebra lineal y SymPy','Métodos numéricos','Ecuaciones diferenciales','Simulaciones y proyectos'].map((nombre, i) =>
-                <div className="temario-resumen-item" key={nombre}><span>{String(i+4).padStart(2,'0')}</span>{nombre}</div>)}
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-functions" size={84}/>
+              <div><p className="etiqueta">UNIDAD 04</p><h2>Estructuras de datos y funciones</h2><p>Organiza mediciones en colecciones y crea funciones reutilizables para cálculos físicos.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–3</p><a className="boton boton-principal" href="#/unidad/unidad-4">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-numpy" size={84}/>
+              <div><p className="etiqueta">UNIDAD 05</p><h2>Computación con NumPy</h2><p>Utiliza arreglos para realizar cálculos sobre conjuntos de mediciones y magnitudes físicas.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–4</p><a className="boton boton-principal" href="#/unidad/unidad-5">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-plot" size={84}/>
+              <div><p className="etiqueta">UNIDAD 06</p><h2>Visualización científica con Matplotlib</h2><p>Transforma resultados numéricos en gráficas legibles, reproducibles y con unidades.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidad 5</p><a className="boton boton-principal" href="#/unidad/unidad-6">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-files" size={84}/>
+              <div><p className="etiqueta">UNIDAD 07</p><h2>Archivos y datos experimentales</h2><p>Organiza archivos, importa mediciones y prepara datos reproducibles para su análisis científico.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–6</p><a className="boton boton-principal" href="#/unidad/unidad-7">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-stats" size={84}/>
+              <div><p className="etiqueta">UNIDAD 08</p><h2>Estadística, incertidumbre y ajuste</h2><p>Resume mediciones, cuantifica su dispersión y ajusta modelos físicos a datos experimentales.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–7</p><a className="boton boton-principal" href="#/unidad/unidad-8">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-linear" size={84}/>
+              <div><p className="etiqueta">UNIDAD 09</p><h2>Álgebra lineal y cálculo simbólico</h2><p>Aplica matrices, sistemas lineales y expresiones simbólicas a problemas físicos.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–8</p><a className="boton boton-principal" href="#/unidad/unidad-9">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-numerical" size={84}/>
+              <div><p className="etiqueta">UNIDAD 10</p><h2>Métodos numéricos fundamentales</h2><p>Resuelve ecuaciones, integra funciones, aproxima derivadas y analiza señales con FFT.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–9</p><a className="boton boton-principal" href="#/unidad/unidad-10">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-odes" size={84}/>
+              <div><p className="etiqueta">UNIDAD 11</p><h2>Ecuaciones diferenciales</h2><p>Modela procesos físicos con Euler, Runge-Kutta, SciPy y diferencias finitas.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidad 10</p><a className="boton boton-principal" href="#/unidad/unidad-11">Explorar unidad →</a></div>
+            </div>
+            <div className="unidad-destacada tarjeta">
+              <PixelIcon name="python-simulation" size={84}/>
+              <div><p className="etiqueta">UNIDAD 12</p><h2>Modelado, animación y proyectos</h2><p>Diseña simulaciones reproducibles, animaciones, métodos Monte Carlo y un proyecto final.</p>
+                <p className="unidad-conteo">5 lecciones · Requiere Unidades 1–11</p><a className="boton boton-principal" href="#/unidad/unidad-12">Explorar unidad →</a></div>
             </div>
           </section>
         )}
@@ -267,21 +340,31 @@ function App() {
 
         {ruta === "/galeria" && (
           <section className="pagina">
-            <p className="etiqueta">CONSULTA POR TAREA</p>
+            <p className="etiqueta">CONSULTA POR TAREA Y DISCIPLINA</p>
             <h1>Galería de código</h1>
-
-
+            <p>Explora programas científicos, modifica sus parámetros y ejecuta su código Python. Los ejemplos del curso mantienen un enlace a la lección donde se explican.</p>
+            <div className="galeria-filtros">
+              <label>Buscar programas
+                <input type="search" value={busquedaGaleria} onChange={e => setBusquedaGaleria(e.target.value)} placeholder="Ej. oscilaciones, FFT, mecánica…" />
+              </label>
+              <label>Área
+                <select value={areaGaleria} onChange={e => setAreaGaleria(e.target.value)}>
+                  <option value="Todas">Todas las áreas</option>
+                  {areasGaleria.map(area => <option key={area} value={area}>{area}</option>)}
+                </select>
+              </label>
+            </div>
+            <p className="galeria-contador" role="status">{resultadosGaleria.length} {resultadosGaleria.length === 1 ? "programa" : "programas"}</p>
+            {resultadosGaleria.length === 0 && <p>No encontramos programas con esos filtros. Prueba otra palabra o área.</p>}
             <div className="recorridos">
-              {ejemplos.map((ejemplo) => (
+              {resultadosGaleria.map(ejemplo => (
                 <article className="tarjeta ficha" key={ejemplo.id}>
-                  <PixelIcon name={ejemplo.id === "posicion-mru" ? "graph" : ejemplo.id === "energia-foton" ? "optics" : "measurement"} size={48}/><p className="categoria">{ejemplo.tarea}</p>
+                  <PixelIcon name={ejemplo.origenLeccion ? "graph" : ejemplo.id === "energia-foton" ? "optics" : "measurement"} size={48}/>
+                  <p className="categoria">{ejemplo.area}</p>
                   <h2 className="titulo-tarjeta">{ejemplo.titulo}</h2>
                   <p>{ejemplo.descripcion}</p>
-
-
-                  <a className="boton" href={enlaceEjemplo(ejemplo.id)}>
-                    Ver programa →
-                  </a>
+                  <p className="galeria-metadatos">{ejemplo.tarea}{ejemplo.dificultadProgramacion ? ` · ${ejemplo.dificultadProgramacion}` : ""}</p>
+                  <a className="boton" href={enlaceEjemplo(ejemplo.id)}>Ver programa →</a>
                 </article>
               ))}
             </div>
@@ -373,7 +456,7 @@ function App() {
         {ejemploActual && (
           <article className="pagina">
             <a href="#/galeria">← Galería de código</a>
-            <p className="etiqueta etiqueta-ejemplo">PROGRAMA DEMOSTRATIVO</p>
+            <p className="etiqueta etiqueta-ejemplo">{ejemploActual.origenLeccion ? "PROGRAMA CIENTÍFICO" : "PROGRAMA DEMOSTRATIVO"}</p>
             <h1>{ejemploActual.titulo}</h1>
             <p>{ejemploActual.descripcion}</p>
 
@@ -382,8 +465,11 @@ function App() {
               <span>{ejemploActual.area}</span>
             </div>
 
+            {ejemploActual.origenLeccion && <p><a href={`#/leccion/${ejemploActual.leccionId}`}>Aprender este programa en la lección: {ejemploActual.leccionTitulo} →</a></p>}
             <h2>Código Python</h2>
-            <EjemploCodigo key={ejemploActual.id} ejemplo={ejemploActual} />
+            {ejemploActual.origenLeccion
+              ? <EjemploEjecutable key={ejemploActual.id} ejemplo={ejemploActual} />
+              : <EjemploCodigo key={ejemploActual.id} ejemplo={ejemploActual} />}
 
             <p className="aviso">{ejemploActual.nota}</p>
           </article>

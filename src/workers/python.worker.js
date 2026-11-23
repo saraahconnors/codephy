@@ -38,7 +38,7 @@ function safeCsvName(name) {
   if (!clean.toLowerCase().endsWith('.csv') || clean === '.' || clean === '..' || clean.length > 100) throw new Error('Nombre CSV no válido.');
   return clean;
 }
-async function handle({ type, code = '', id, name, bytes, required, inputs = [] }) {
+async function handle({ type, code = '', id, name, bytes, required, inputs = [], staticPlots = false }) {
   if (type === 'upload') {
     try {
       const filename = safeCsvName(name);
@@ -73,7 +73,11 @@ async function handle({ type, code = '', id, name, bytes, required, inputs = [] 
     return;
   }
   if (type === 'warmup') { await getPython(); return; }
-  if (type === 'prepare') { await prepare(String(code)); status('Entorno preparado'); return; }
+  if (type === 'prepare') {
+    try { await prepare(String(code)); self.postMessage({ type: 'prepared', id }); }
+    catch (error) { self.postMessage({ type: 'prepare-error', id, message: String(error?.message ?? error) }); }
+    return;
+  }
   if (type !== 'run') return;
   try {
     const { python, needsMatplotlib } = await prepare(String(code));
@@ -82,17 +86,27 @@ async function handle({ type, code = '', id, name, bytes, required, inputs = [] 
     python.globals.set('_codephy_inputs_json', JSON.stringify(Array.isArray(inputs) ? inputs.map(String) : []));
     python.globals.set('_codephy_uploaded', Array.from(uploaded));
     python.globals.set('_codephy_plot_enabled', needsMatplotlib);
+    python.globals.set('_codephy_static_plots', Boolean(staticPlots));
     const raw = await python.runPythonAsync(`
 import io, json, traceback, contextlib, base64, os, math
 os.environ['MPLBACKEND'] = 'Agg'
 _cp_out = io.StringIO()
 _cp_error = None
+_cp_error_detail = None
 _cp_plots = []
 _cp_frames = []
 _cp_charts = []
 _cp_files = []
 _cp_uploaded = set(_codephy_uploaded)
 _cp_plt = None
+
+# Cada ejercicio de las lecciones comienza sin CSV generados por ejercicios previos.
+# Los datos cargados explícitamente por el estudiante se conservan en el entorno.
+if _codephy_static_plots:
+    for _prev in os.listdir('/home/pyodide'):
+        if (_prev.lower().endswith('.csv') and _prev not in _cp_uploaded
+                and os.path.isfile('/home/pyodide/' + _prev)):
+            os.remove('/home/pyodide/' + _prev)
 
 def _save_frame(fig):
     if len(_cp_frames) >= 36:
@@ -134,16 +148,25 @@ try:
             _cp_plt.show = lambda *args, **kwargs: None
         _cp_input_values = iter(json.loads(_codephy_inputs_json))
         def _cp_input(prompt=''):
-            print(str(prompt), end='')
             try:
-                return next(_cp_input_values)
+                _answer = next(_cp_input_values)
             except StopIteration:
                 raise EOFError('Falta un valor de entrada. Completa los campos antes de ejecutar.')
+            print(str(prompt) + str(_answer))
+            return _answer
         _scope = {'__name__': '__main__', 'input': _cp_input}
         try:
             exec(compile(_codephy_source, '<CodePhy>', 'exec'), _scope)
-        except BaseException:
-            _cp_error = traceback.format_exc()
+        except BaseException as _exc:
+            _cp_error_detail = traceback.format_exc()
+            _etype = type(_exc).__name__
+            _message = str(_exc)
+            if isinstance(_exc, SyntaxError):
+                _line = _exc.lineno
+            else:
+                _user_frames = [frame for frame in traceback.extract_tb(_exc.__traceback__) if frame.filename == '<CodePhy>']
+                _line = _user_frames[-1].lineno if _user_frames else None
+            _cp_error = ('Línea ' + str(_line) + ': ' if _line else '') + _etype + ': ' + _message
         if _cp_plt is not None:
             # FuncAnimation pertenece a Matplotlib y funciona también en Colab.
             from matplotlib.animation import FuncAnimation
@@ -161,7 +184,7 @@ try:
             if not _animations:
                 for _n in _cp_plt.get_fignums()[:3]:
                     _fig = _cp_plt.figure(_n)
-                    if _read_interactive_line(_fig):
+                    if not _codephy_static_plots and _read_interactive_line(_fig):
                         continue
                     _buf = io.BytesIO()
                     _fig.savefig(_buf, format='png', dpi=90, bbox_inches='tight')
@@ -175,10 +198,12 @@ try:
                     with open(_path, 'rb') as _f:
                         _cp_files.append({'name': _filename,
                             'base64': base64.b64encode(_f.read()).decode('ascii')})
-except BaseException:
-    _cp_error = traceback.format_exc()
+except BaseException as _exc:
+    _cp_error_detail = traceback.format_exc()
+    _cp_error = type(_exc).__name__ + ': ' + str(_exc)
 json.dumps({'stdout': _cp_out.getvalue()[:20000],
             'error': _cp_error[:12000] if _cp_error else None,
+            'errorDetail': _cp_error_detail[:12000] if _cp_error_detail else None,
             'plots': _cp_plots, 'frames': _cp_frames, 'charts': _cp_charts, 'files': _cp_files})
 `);
     self.postMessage({ type: 'result', id, ...JSON.parse(raw) });
